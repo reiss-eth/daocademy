@@ -174,50 +174,37 @@
 document.getElementById("burnForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Verhindert das Standard-Formular-Absenden
 
-    console.log("sendWhatsAppMessage() wurde aufgerufen!"); // Debugging
+    console.log("📤 Formulardaten werden gesendet..."); // Debugging
 
-    var formData = new FormData(document.getElementById("burnForm"));
-
-    var phoneNumber = document.getElementById("whatsapp-number").value.trim();
-    var username = document.getElementById("username").value.trim();
-    var walletAddress = document.getElementById("wallet").value.trim();
-    var coachName = document.getElementById("coach").value.trim();
-    var subscriptionType = document.getElementById("subscription").value;
-
-    // Prüfen, ob alle Felder ausgefüllt sind
-    if (!username || !walletAddress || !coachName || !phoneNumber) { 
-        alert("Bitte fülle alle Felder aus, bevor du die Nachricht sendest.");
-        return; // ✅ Jetzt ist return innerhalb der Funktion
-    }
-
-    // Speichert die Daten in der MySQL-Datenbank
-    fetch("https://daocademy.infinityfreeapp.com/save.php", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
+    var formData = {
         username: document.getElementById("username").value.trim(),
         wallet: document.getElementById("wallet").value.trim(),
         coach: document.getElementById("coach").value.trim(),
         subscription: document.getElementById("subscription").value,
         whatsapp: document.getElementById("whatsapp-number").value.trim(),
-        dfs_amount: document.getElementById("burn-amount").innerText.trim(), // DFS-Token-Wert hinzufügen
-        consent_given: document.getElementById("whatsapp-consent").checked ? "yes" : "no" // Checkbox-Status
+        dfs_amount: document.getElementById("burn-amount").innerText.trim()
+    };
+
+    console.log("📋 Daten vor dem Absenden:", formData); // Debugging: Konsolen-Ausgabe
+
+    fetch("https://daocademy.mywebcommunity.org/save.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData) // JSON-Daten senden
     })
-})
+    .then(response => response.json()) // Antwort als JSON parsen
+    .then(result => {
+        console.log("✅ Antwort von save.php:", result); // Debugging: Antwort anzeigen
 
-.then(response => response.json())
-.then(result => {
-    console.log("Antwort von save.php:", result);
-    if (result.status === "success") {
-        alert("✅ Daten erfolgreich gespeichert!");
-    } else {
-        alert("❌ Fehler beim Speichern: " + result.message);
-    }
-})
-.catch(error => console.error("Fehler:", error));
-
+        if (result.status === "success") {
+            alert("✅ Daten erfolgreich gespeichert!");
+        } else {
+            alert("❌ Fehler beim Speichern: " + result.message);
+        }
+    })
+    .catch(error => console.error("🚨 Fehler:", error));
 });
 
    function validateForm() {
