@@ -127,7 +127,7 @@
     
     <div class="container">
         <h2>Proof of Burn</h2>
-        <form onsubmit="validateForm(event)">
+       <form id="burnForm" onsubmit="sendWhatsAppMessage(event)">
             <label for="username">Benutzername</label>
             <input type="text" id="username" placeholder="Student007" required>
             
@@ -160,54 +160,66 @@
    <button type="button" class="button" onclick="sendWhatsAppMessage()">Senden</button>
 
 <script>
-function sendWhatsAppMessage() {
-    var phoneNumber = document.getElementById("whatsapp-number").value.trim(); // Vom Nutzer eingegebene WhatsApp-Nummer
-    var username = document.getElementById("username").value.trim();
-    var walletAddress = document.getElementById("wallet").value.trim();
-    var coachName = document.getElementById("coach").value.trim();
-    var subscriptionType = document.getElementById("subscription").value;
-    var dfsTokenAmount = document.getElementById("burn-amount").innerText.trim(); // Anzahl der DFS Tokens
-    var consentChecked = document.getElementById("whatsapp-consent").checked;
+function sendWhatsAppMessage(event) {
+    event.preventDefault(); // Verhindert, dass die Seite neu lädt
 
-    // Prüfe, ob alle Felder ausgefüllt sind
-    if (!username || !walletAddress || !coachName || !dfsTokenAmount || !phoneNumber) {
-        alert("Bitte fülle alle Felder aus, bevor du die Nachricht sendest.");
-        return;
-    }
+    var formData = new FormData(document.getElementById("burnForm"));
 
-    // Prüfe, ob die WhatsApp-Nummer korrekt eingegeben wurde (nur Zahlen + Ländercode)
-    var phoneRegex = /^\+?[0-9]{10,15}$/;
-    if (!phoneRegex.test(phoneNumber)) {
-        alert("Ungültige WhatsApp-Nummer! Stelle sicher, dass sie mit + beginnt und nur Zahlen enthält.");
-        return;
-    }
+    // Speichert die Daten in der MySQL-Datenbank
+    fetch("save.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+        console.log(result); // Zeigt an, ob die Speicherung erfolgreich war
 
-    // Wallet-Adresse prüfen (0x + genau 40 hexadezimale Zeichen)
-    var walletRegex = /^0x[a-fA-F0-9]{40}$/;
-    if (!walletRegex.test(walletAddress)) {
-        alert("Ungültige Wallet-Adresse! Stelle sicher, dass sie mit '0x' beginnt und 40 hexadezimale Zeichen enthält.");
-        return;
-    }
+        // Daten für WhatsApp abrufen
+        var phoneNumber = document.getElementById("whatsapp-number").value.trim();
+        var username = document.getElementById("username").value.trim();
+        var walletAddress = document.getElementById("wallet").value.trim();
+        var coachName = document.getElementById("coach").value.trim();
+        var subscriptionType = document.getElementById("subscription").value;
+        var dfsTokenAmount = document.getElementById("burn-amount").innerText.trim();
 
-    // Prüfe, ob die Checkbox aktiviert ist
-    if (!consentChecked) {
-        alert("Bitte stimme der Übermittlung der Daten über WhatsApp zu.");
-        return;
-    }
+        // Prüfe, ob alle Felder ausgefüllt sind
+        if (!username || !walletAddress || !coachName || !dfsTokenAmount || !phoneNumber) {
+            alert("Bitte fülle alle Felder aus, bevor du die Nachricht sendest.");
+            return;
+        }
 
-    var message = `🔥*Proof of Burn*🔥\n\n` +
-                  `👨🏼‍🎓 *Benutzername:* ${username}\n` +
-                  `🔎 *Proof:* https://arbiscan.io/token/0x912ce59144191c1204e64559fe8253a0e49e6548?a=${walletAddress}\n` +
-                  `🎖️ *Coach:* ${coachName}\n` +
-                  `🔥 *Abo Preis:* ${subscriptionType}\n` +
-                  `📱 *WhatsApp Nummer:* ${phoneNumber}\n\n` +
-                  `✅ Ich sende ${dfsTokenAmount} an die Burning Adresse:\n` +
-                  `0x1dEaD0000000000000000000000000000000dEaD`;
+        // Prüfe, ob die WhatsApp-Nummer korrekt ist
+        var phoneRegex = /^\+?[0-9]{10,15}$/;
+        if (!phoneRegex.test(phoneNumber)) {
+            alert("Ungültige WhatsApp-Nummer! Stelle sicher, dass sie mit + beginnt und nur Zahlen enthält.");
+            return;
+        }
 
-    var whatsappURL = "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodeURIComponent(message);
-    window.open(whatsappURL, "_blank");
+        // Wallet-Adresse prüfen (0x + genau 40 hexadezimale Zeichen)
+        var walletRegex = /^0x[a-fA-F0-9]{40}$/;
+        if (!walletRegex.test(walletAddress)) {
+            alert("Ungültige Wallet-Adresse! Stelle sicher, dass sie mit '0x' beginnt und 40 hexadezimale Zeichen enthält.");
+            return;
+        }
+
+        // WhatsApp-Nachricht formatieren
+        var message = `🔥*Proof of Burn*🔥\n\n` +
+                      `👨🏼‍🎓 *Benutzername:* ${username}\n` +
+                      `🔎 *Proof:* https://arbiscan.io/token/0x912ce59144191c1204e64559fe8253a0e49e6548?a=${walletAddress}\n` +
+                      `🎖️ *Coach:* ${coachName}\n` +
+                      `🔥 *Abo Preis:* ${subscriptionType}\n` +
+                      `📱 *WhatsApp Nummer:* ${phoneNumber}\n\n` +
+                      `✅ Ich sende ${dfsTokenAmount} an die Burning Adresse:\n` +
+                      `0x1dEaD0000000000000000000000000000000dEaD`;
+
+        // WhatsApp öffnen
+        var whatsappURL = "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodeURIComponent(message);
+        window.open(whatsappURL, "_blank");
+    })
+    .catch(error => console.error("Fehler:", error));
 }
 </script>
+
 
 </div>
 
