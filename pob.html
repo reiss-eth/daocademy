@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proof of Burn - DeFi Syndicate</title>
+
+	<script>
+    // Prüft, ob MetaMask existiert und deaktiviert automatisch Web3-Anfragen
+    if (typeof window.ethereum !== "undefined") {
+        console.log("⚠️ MetaMask ist installiert, aber wird nicht benötigt. Deaktiviere Web3-Anfragen.");
+        window.ethereum = undefined; // Entfernt MetaMask-Zugriff für den gesamten Code
+    }
+</script>
+
+
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
