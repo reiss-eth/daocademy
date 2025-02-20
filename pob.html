@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proof of Burn - DeFi Syndicate</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', sans-serif;
+        }
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+            padding: 40px;
+        }
+        header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .logotop {
+            max-width: 150px;
+            height: auto;
+	 }
+        .logobottom {
+            max-width: 40px;
+            height: auto;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+        }
+        h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #ffffff;
+        }
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: none;
+            text-align: center;
+            font-size: 16px;
+            background-color: #2a2a2a;
+            color: white;
+        }
+        .token-price {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #ff3b3b;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #ff3b3b;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background: #e63232;
+        }
+    </style>
+    <script>
+        let dfsTokenAmount = 0;
+        
+        async function fetchUniswapPrice() {
+            try {
+                let response = await fetch('https://api.dexscreener.com/latest/dex/pairs/arbitrum/0xcda53b1f66614552f834ceef361a8d12a0b8dad8');
+                let data = await response.json();
+                let price = parseFloat(data.pairs[0].priceUsd);
+                document.getElementById('token-price').innerText = `DFS Token Preis: $${price.toFixed(4)}`;
+                
+                function updateTokenAmount() {
+                    let subscription = document.getElementById('subscription').value;
+                    if (subscription === 'Monats Abo (30 USD)') {
+                        dfsTokenAmount = 30 / price;
+                    } else if (subscription === 'Jahres Abo (299 USD)') {
+                        dfsTokenAmount = 299 / price;
+                    } else if (subscription === 'Lifetime Abo (1499 USD)') {
+                        dfsTokenAmount = 1499 / price;
+                    }
+                    document.getElementById('token-amount').innerText = `Mit dem Senden des Formulars bestätige ich, dass ich ${dfsTokenAmount.toFixed(4)} DFS kaufen und an die unten aufgeführte Walletadresse zum Zwecke des Tokenburns senden werde. Ebenfalls werden alle hier angegebenen Daten, inklusive meiner Wallet-Adresse über WhatsApp als Auftragsbestätigung verschickt. Ich bin mit diesem Vorgehen und der beschriebenen Datenübermittlung einverstanden.`;
+                    document.getElementById('burn-amount').innerText = `${dfsTokenAmount.toFixed(4)} DFS`;
+                }
+                
+                document.getElementById('subscription').addEventListener('change', updateTokenAmount);
+                updateTokenAmount();
+            } catch (error) {
+                document.getElementById('token-price').innerText = 'DFS Token Preis: N/A';
+                document.getElementById('token-amount').innerText = 'Benötigte DFS Tokens: N/A';
+            }
+        }
+        window.onload = fetchUniswapPrice;
+    </script>
+</head>
+<body>
+    <header>
+        <img src="DFS-Logo-transparent.png" alt="DeFi Syndicate Logo" class="logotop">
+        <p id="token-price" class="token-price">DFS Token Preis: Lade...</p>
+    </header>
+    
+    <div class="container">
+        <h2>Proof of Burn</h2>
+        <form onsubmit="validateForm(event)">
+            <label for="username">Benutzername</label>
+            <input type="text" id="username" placeholder="Student007" required>
+            
+            <label for="wallet">Wallet Adresse</label><a href="pobscan.html">📷</a>
+            <input type="text" id="wallet" placeholder="0x0123456789012345678901234567890123456789" required>
+            
+	    <label for="whatsapp-number">WhatsApp Nummer</label>
+	    <input type="tel" id="whatsapp-number" placeholder="+49 1512 3456789" required>
+
+
+
+            <label for="coach">Coach</label>
+            <input type="text" id="coach" value="DeFi Syndicate -1" readonly>
+            
+            <label for="subscription">Zugangs-Typ</label>
+            <select id="subscription" required>
+                <option value="Monats Abo (30 USD)">Monats Zugang (30 USD)</option>
+                <option value="Jahres Abo (299 USD)">Jahres Zugang (299 USD)</option>
+                <option value="Lifetime Abo (1499 USD)">Lifetime Zugang (1499 USD)</option>
+            </select>
+           
+        <p id="token-amount" class="token-price">Benötigte DFS Tokens: Lade...</p>
+            
+        <div class="checkbox-container">
+                <input type="checkbox" id="whatsapp-consent" onchange="toggleSubmitButton()">
+                <label for="whatsapp-consent">Ich stimme zu, dass meine Daten über WhatsApp übermittelt werden.</label>
+            </div>
+
+
+   <button type="button" class="button" onclick="sendWhatsAppMessage()">Senden</button>
+
+<script>
+function sendWhatsAppMessage() {
+    var phoneNumber = document.getElementById("whatsapp-number").value.trim(); // Vom Nutzer eingegebene WhatsApp-Nummer
+    var username = document.getElementById("username").value.trim();
+    var walletAddress = document.getElementById("wallet").value.trim();
+    var coachName = document.getElementById("coach").value.trim();
+    var subscriptionType = document.getElementById("subscription").value;
+    var dfsTokenAmount = document.getElementById("burn-amount").innerText.trim(); // Anzahl der DFS Tokens
+    var consentChecked = document.getElementById("whatsapp-consent").checked;
+
+    // Prüfe, ob alle Felder ausgefüllt sind
+    if (!username || !walletAddress || !coachName || !dfsTokenAmount || !phoneNumber) {
+        alert("Bitte fülle alle Felder aus, bevor du die Nachricht sendest.");
+        return;
+    }
+
+    // Prüfe, ob die WhatsApp-Nummer korrekt eingegeben wurde (nur Zahlen + Ländercode)
+    var phoneRegex = /^\+?[0-9]{10,15}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+        alert("Ungültige WhatsApp-Nummer! Stelle sicher, dass sie mit + beginnt und nur Zahlen enthält.");
+        return;
+    }
+
+    // Wallet-Adresse prüfen (0x + genau 40 hexadezimale Zeichen)
+    var walletRegex = /^0x[a-fA-F0-9]{40}$/;
+    if (!walletRegex.test(walletAddress)) {
+        alert("Ungültige Wallet-Adresse! Stelle sicher, dass sie mit '0x' beginnt und 40 hexadezimale Zeichen enthält.");
+        return;
+    }
+
+    // Prüfe, ob die Checkbox aktiviert ist
+    if (!consentChecked) {
+        alert("Bitte stimme der Übermittlung der Daten über WhatsApp zu.");
+        return;
+    }
+
+    var message = `🔥*Proof of Burn*🔥\n\n` +
+                  `👨🏼‍🎓 *Benutzername:* ${username}\n` +
+                  `🔎 *Proof:* https://arbiscan.io/token/0x912ce59144191c1204e64559fe8253a0e49e6548?a=${walletAddress}\n` +
+                  `🎖️ *Coach:* ${coachName}\n` +
+                  `🔥 *Abo Preis:* ${subscriptionType}\n` +
+                  `📱 *WhatsApp Nummer:* ${phoneNumber}\n\n` +
+                  `✅ Ich sende ${dfsTokenAmount} an die Burning Adresse:\n` +
+                  `0x1dEaD0000000000000000000000000000000dEaD`;
+
+    var whatsappURL = "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodeURIComponent(message);
+    window.open(whatsappURL, "_blank");
+}
+</script>
+
+</div>
+
+    <br><br>Bitte sende nach dem absenden des Formulars <p id="burn-amount" class="token-price"></p> an folgende Adresse:
+    <H3><p>0x1dEaD000...000dEaD</p></H3>
+
+
+<button type="button" onclick="copyToClipboard('0x1dEaD0000000000000000000000000000000dEaD')">
+    Burn Adresse kopieren
+</button>
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Burning Adresse wurde kopiert: " + text);
+    }).catch(err => {
+        console.error("Fehler beim Kopieren: ", err);
+    });
+}
+</script>
+
+
+
+ <br><br><footer>
+        <img src="logo.png" alt="DeFi Syndicate Logo" class="logobottom">
+        <p>&copy; 2025 DeFi Syndicate | Dezentral. Gemeinschaftlich. Stark.</p>
+    </footer>
+</body>
+</html>
