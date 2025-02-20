@@ -225,41 +225,74 @@ document.getElementById("burnForm").addEventListener("submit", function(event) {
     var walletAddress = document.getElementById("wallet").value.trim();
     var coachName = document.getElementById("coach").value.trim();
     var phoneNumber = document.getElementById("whatsapp-number").value.trim();
+    var subscriptionType = document.getElementById("subscription").value; // ✅ FEHLER BEHOBEN
+    var dfsTokenAmount = document.getElementById("burn-amount").innerText.trim(); // ✅ DFS-Token-Wert holen
 
-    if (!username || !walletAddress || !coachName || !phoneNumber) {
+    if (!username || !walletAddress || !coachName || !phoneNumber || !dfsTokenAmount) {
         alert("Bitte fülle alle Felder aus, bevor du die Nachricht sendest.");
-        return false; // ✅ Jetzt korrekt innerhalb einer Funktion
+        return false;
     }
-    return true;
-}
 
     var phoneRegex = /^\+?[0-9]{10,15}$/;
     if (!phoneRegex.test(phoneNumber)) {
         alert("Ungültige WhatsApp-Nummer! Stelle sicher, dass sie mit + beginnt und nur Zahlen enthält.");
-        return;
+        return false;
     }
 
     var walletRegex = /^0x[a-fA-F0-9]{40}$/;
     if (!walletRegex.test(walletAddress)) {
         alert("Ungültige Wallet-Adresse! Stelle sicher, dass sie mit '0x' beginnt und 40 hexadezimale Zeichen enthält.");
-        return;
+        return false;
     }
 
+    return {
+        username,
+        walletAddress,
+        coachName,
+        phoneNumber,
+        subscriptionType,
+        dfsTokenAmount
+    };
+}
+
+document.getElementById("burnForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // Verhindert das Standard-Absenden
+
+    var formData = validateForm();
+    if (!formData) return; // Falls `false` zurückkommt, wird abgebrochen
+
+    fetch("https://daocademy.infinityfreeapp.com/save.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log("Antwort von save.php:", result);
+        if (result.status === "success") {
+            alert("✅ Daten erfolgreich gespeichert!");
+        } else {
+            alert("❌ Fehler beim Speichern: " + result.message);
+        }
+    })
+    .catch(error => console.error("Fehler:", error));
+
+    // WhatsApp-Nachricht senden
     var message = `🔥*Proof of Burn*🔥\n\n` +
-                  `👨🏼‍🎓 *Benutzername:* ${username}\n` +
-                  `🔎 *Wallet:* ${walletAddress}\n` +
-                  `🎖️ *Coach:* ${coachName}\n` +
-                  `🔥 *Abo Preis:* ${subscriptionType}\n` +
-                  `📱 *WhatsApp Nummer:* ${phoneNumber}\n\n` +
-                  `✅ Ich sende Tokens an die Burning Adresse:\n` +
+                  `👨🏼‍🎓 *Benutzername:* ${formData.username}\n` +
+                  `🔎 *Wallet:* ${formData.walletAddress}\n` +
+                  `🎖️ *Coach:* ${formData.coachName}\n` +
+                  `🔥 *Abo Preis:* ${formData.subscriptionType}\n` +
+                  `📱 *WhatsApp Nummer:* ${formData.phoneNumber}\n\n` +
+                  `✅ Ich sende ${formData.dfsTokenAmount} an die Burning Adresse:\n` +
                   `0x1dEaD0000000000000000000000000000000dEaD`;
 
-    var whatsappURL = "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodeURIComponent(message);
+    var whatsappURL = "https://api.whatsapp.com/send?phone=" + formData.phoneNumber + "&text=" + encodeURIComponent(message);
     window.open(whatsappURL, "_blank");
-})
-.catch(error => console.error("Fehler:", error));
-
 });
+
 </script>
 
 
