@@ -168,16 +168,16 @@ document.getElementById("burnForm").addEventListener("submit", function(event) {
 
     var formData = new FormData(document.getElementById("burnForm"));
 
-    // Prüfen, ob alle Felder ausgefüllt sind
     var phoneNumber = document.getElementById("whatsapp-number").value.trim();
     var username = document.getElementById("username").value.trim();
     var walletAddress = document.getElementById("wallet").value.trim();
     var coachName = document.getElementById("coach").value.trim();
     var subscriptionType = document.getElementById("subscription").value;
 
+    // Prüfen, ob alle Felder ausgefüllt sind
     if (!username || !walletAddress || !coachName || !phoneNumber) { 
         alert("Bitte fülle alle Felder aus, bevor du die Nachricht sendest.");
-        return; // Jetzt korrekt, da in der Funktion
+        return; // ✅ Jetzt ist return innerhalb der Funktion
     }
 
     // Speichert die Daten in der MySQL-Datenbank
