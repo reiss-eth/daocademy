@@ -127,7 +127,7 @@
     
     <div class="container">
         <h2>Proof of Burn</h2>
-       <form id="burnForm" onsubmit="sendWhatsAppMessage(event)">
+      <form id="burnForm">
             <label for="username">Benutzername</label>
             <input type="text" id="username" placeholder="Student007" required>
             
@@ -170,50 +170,54 @@ document.getElementById("burnForm").addEventListener("submit", function(event) {
 
     // Speichert die Daten in der MySQL-Datenbank
    fetch("https://daocademy.infinityfreeapp.com/save.php", {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.text())
-    .then(result => {
-        console.log("Antwort von save.php:", result); // Debugging
+    method: "POST",
+    mode: "cors", // Wichtig für CORS-Freigabe
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: new URLSearchParams(new FormData(document.getElementById("burnForm"))).toString()
+})
+.then(response => response.text())
+.then(result => {
+    console.log("Antwort von save.php:", result); // Debugging
 
-        var phoneNumber = document.getElementById("whatsapp-number").value.trim();
-        var username = document.getElementById("username").value.trim();
-        var walletAddress = document.getElementById("wallet").value.trim();
-        var coachName = document.getElementById("coach").value.trim();
-        var subscriptionType = document.getElementById("subscription").value;
-        var dfsTokenAmount = document.getElementById("burn-amount").innerText.trim();
+    var phoneNumber = document.getElementById("whatsapp").value.trim(); // Korrigierte ID
+    var username = document.getElementById("username").value.trim();
+    var walletAddress = document.getElementById("wallet").value.trim();
+    var coachName = document.getElementById("coach").value.trim();
+    var subscriptionType = document.getElementById("subscription").value;
 
-        if (!username || !walletAddress || !coachName || !dfsTokenAmount || !phoneNumber) {
-            alert("Bitte fülle alle Felder aus, bevor du die Nachricht sendest.");
-            return;
-        }
+    if (!username || !walletAddress || !coachName || !phoneNumber) { // dfsTokenAmount entfernt
+        alert("Bitte fülle alle Felder aus, bevor du die Nachricht sendest.");
+        return;
+    }
 
-        var phoneRegex = /^\+?[0-9]{10,15}$/;
-        if (!phoneRegex.test(phoneNumber)) {
-            alert("Ungültige WhatsApp-Nummer! Stelle sicher, dass sie mit + beginnt und nur Zahlen enthält.");
-            return;
-        }
+    var phoneRegex = /^\+?[0-9]{10,15}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+        alert("Ungültige WhatsApp-Nummer! Stelle sicher, dass sie mit + beginnt und nur Zahlen enthält.");
+        return;
+    }
 
-        var walletRegex = /^0x[a-fA-F0-9]{40}$/;
-        if (!walletRegex.test(walletAddress)) {
-            alert("Ungültige Wallet-Adresse! Stelle sicher, dass sie mit '0x' beginnt und 40 hexadezimale Zeichen enthält.");
-            return;
-        }
+    var walletRegex = /^0x[a-fA-F0-9]{40}$/;
+    if (!walletRegex.test(walletAddress)) {
+        alert("Ungültige Wallet-Adresse! Stelle sicher, dass sie mit '0x' beginnt und 40 hexadezimale Zeichen enthält.");
+        return;
+    }
 
-        var message = `🔥*Proof of Burn*🔥\n\n` +
-                      `👨🏼‍🎓 *Benutzername:* ${username}\n` +
-                      `🔎 *Proof:* https://arbiscan.io/token/0x912ce59144191c1204e64559fe8253a0e49e6548?a=${walletAddress}\n` +
-                      `🎖️ *Coach:* ${coachName}\n` +
-                      `🔥 *Abo Preis:* ${subscriptionType}\n` +
-                      `📱 *WhatsApp Nummer:* ${phoneNumber}\n\n` +
-                      `✅ Ich sende ${dfsTokenAmount} an die Burning Adresse:\n` +
-                      `0x1dEaD0000000000000000000000000000000dEaD`;
+    var message = `🔥*Proof of Burn*🔥\n\n` +
+                  `👨🏼‍🎓 *Benutzername:* ${username}\n` +
+                  `🔎 *Wallet:* ${walletAddress}\n` +
+                  `🎖️ *Coach:* ${coachName}\n` +
+                  `🔥 *Abo Preis:* ${subscriptionType}\n` +
+                  `📱 *WhatsApp Nummer:* ${phoneNumber}\n\n` +
+                  `✅ Ich sende Tokens an die Burning Adresse:\n` +
+                  `0x1dEaD0000000000000000000000000000000dEaD`;
 
-        var whatsappURL = "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodeURIComponent(message);
-        window.open(whatsappURL, "_blank");
-    })
-    .catch(error => console.error("Fehler:", error));
+    var whatsappURL = "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodeURIComponent(message);
+    window.open(whatsappURL, "_blank");
+})
+.catch(error => console.error("Fehler:", error));
+
 });
 </script>
 
