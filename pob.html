@@ -169,7 +169,7 @@ document.getElementById("burnForm").addEventListener("submit", function(event) {
     var formData = new FormData(document.getElementById("burnForm"));
 
     // Speichert die Daten in der MySQL-Datenbank
-   fetch("http://daocademy.infinityfreeapp.com/save.php", {
+   fetch("https://daocademy.infinityfreeapp.com/save.php", {
         method: "POST",
         body: formData
     })
