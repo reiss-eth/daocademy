@@ -157,16 +157,18 @@
             </div>
 
 
-   <button type="button" class="button" onclick="sendWhatsAppMessage()">Senden</button>
+   <button type="submit" class="button" id="sendButton">Senden</button>
+
 
 <script>
-function sendWhatsAppMessage(event) {
-    event.preventDefault(); // Verhindert, dass die Seite neu lädt
+document.getElementById("burnForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Verhindert das Standard-Formular-Absenden
 
-    console.log("sendWhatsAppMessage() wurde aufgerufen!"); // Test
+    console.log("sendWhatsAppMessage() wurde aufgerufen!"); // Debugging
 
     var formData = new FormData(document.getElementById("burnForm"));
 
+    // Speichert die Daten in der MySQL-Datenbank
     fetch("save.php", {
         method: "POST",
         body: formData
@@ -212,7 +214,7 @@ function sendWhatsAppMessage(event) {
         window.open(whatsappURL, "_blank");
     })
     .catch(error => console.error("Fehler:", error));
-}
+});
 </script>
 
 
