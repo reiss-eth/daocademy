@@ -192,36 +192,29 @@ document.getElementById("burnForm").addEventListener("submit", function(event) {
 
     // Speichert die Daten in der MySQL-Datenbank
     fetch("https://daocademy.infinityfreeapp.com/save.php", {
-        method: "POST",
-        mode: "cors", 
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: new URLSearchParams(formData).toString()
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        username: document.getElementById("username").value.trim(),
+        wallet: document.getElementById("wallet").value.trim(),
+        coach: document.getElementById("coach").value.trim(),
+        subscription: document.getElementById("subscription").value,
+        whatsapp: document.getElementById("whatsapp-number").value.trim()
     })
-    .then(response => response.json()) 
-    .then(result => {
-        console.log("Antwort von save.php:", result);
-        if (result.status === "success") {
-            alert("✅ Daten erfolgreich gespeichert!");
+})
+.then(response => response.json())
+.then(result => {
+    console.log("Antwort von save.php:", result);
+    if (result.status === "success") {
+        alert("✅ Daten erfolgreich gespeichert!");
+    } else {
+        alert("❌ Fehler beim Speichern: " + result.message);
+    }
+})
+.catch(error => console.error("Fehler:", error));
 
-            // Jetzt erst WhatsApp Nachricht senden
-            var message = `🔥*Proof of Burn*🔥\n\n` +
-                          `👨🏼‍🎓 *Benutzername:* ${username}\n` +
-                          `🔎 *Wallet:* ${walletAddress}\n` +
-                          `🎖️ *Coach:* ${coachName}\n` +
-                          `🔥 *Abo Preis:* ${subscriptionType}\n` +
-                          `📱 *WhatsApp Nummer:* ${phoneNumber}\n\n` +
-                          `✅ Ich sende Tokens an die Burning Adresse:\n` +
-                          `0x1dEaD0000000000000000000000000000000dEaD`;
-
-            var whatsappURL = "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + encodeURIComponent(message);
-            window.open(whatsappURL, "_blank");
-        } else {
-            alert("❌ Fehler beim Speichern: " + result.message);
-        }
-    })
-    .catch(error => console.error("Fehler:", error));
 });
 
     var phoneNumber = document.getElementById("whatsapp").value.trim(); // Korrigierte ID
