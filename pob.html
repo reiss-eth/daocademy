@@ -174,37 +174,47 @@
 document.getElementById("burnForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Verhindert das Standard-Formular-Absenden
 
-    console.log("📤 Formulardaten werden gesendet..."); // Debugging
+    console.log("Formular wurde abgeschickt!"); // Debugging
 
-    var formData = {
-        username: document.getElementById("username").value.trim(),
-        wallet: document.getElementById("wallet").value.trim(),
-        coach: document.getElementById("coach").value.trim(),
-        subscription: document.getElementById("subscription").value,
-        whatsapp: document.getElementById("whatsapp-number").value.trim(),
-        dfs_amount: document.getElementById("burn-amount").innerText.trim()
-    };
+    var formData = new FormData(document.getElementById("burnForm"));
 
-    console.log("📋 Daten vor dem Absenden:", formData); // Debugging: Konsolen-Ausgabe
-
+    // **Daten in die MySQL-Datenbank speichern**
     fetch("https://daocademy.mywebcommunity.org/save.php", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData) // JSON-Daten senden
+        mode: "cors", // Wichtig für CORS-Freigabe
+        body: formData
     })
     .then(response => response.json()) // Antwort als JSON parsen
     .then(result => {
-        console.log("✅ Antwort von save.php:", result); // Debugging: Antwort anzeigen
-
+        console.log("Antwort von save.php:", result);
         if (result.status === "success") {
             alert("✅ Daten erfolgreich gespeichert!");
+
+            // **WhatsApp-Nachricht vorbereiten**
+            var fixedPhoneNumber = "+4915129147194"; // Feste WhatsApp-Nummer
+            var username = document.getElementById("username").value.trim();
+            var walletAddress = document.getElementById("wallet").value.trim();
+            var coachName = document.getElementById("coach").value.trim();
+            var subscriptionType = document.getElementById("subscription").value;
+            var dfsTokenAmount = document.getElementById("burn-amount").innerText.trim();
+            var userPhoneNumber = document.getElementById("whatsapp-number").value.trim(); // Eingegebene Nummer des Nutzers
+
+            var message = `🔥*Proof of Burn*🔥\n\n` +
+                          `👨🏼‍🎓 *Benutzername:* ${username}\n` +
+                          `🔎 *Wallet:* ${walletAddress}\n` +
+                          `🎖️ *Coach:* ${coachName}\n` +
+                          `🔥 *Abo Preis:* ${subscriptionType}\n` +
+                          `📱 *WhatsApp Nummer des Nutzers:* ${userPhoneNumber}\n\n` +
+                          `✅ Ich sende ${dfsTokenAmount} an die Burning Adresse:\n` +
+                          `0x1dEaD0000000000000000000000000000000dEaD`;
+
+            var whatsappURL = "https://api.whatsapp.com/send?phone=" + fixedPhoneNumber + "&text=" + encodeURIComponent(message);
+            window.open(whatsappURL, "_blank");
         } else {
             alert("❌ Fehler beim Speichern: " + result.message);
         }
     })
-    .catch(error => console.error("🚨 Fehler:", error));
+    .catch(error => console.error("Fehler:", error));
 });
 
    function validateForm() {
