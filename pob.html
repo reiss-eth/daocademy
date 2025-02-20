@@ -169,7 +169,7 @@ document.getElementById("burnForm").addEventListener("submit", function(event) {
     var formData = new FormData(document.getElementById("burnForm"));
 
     // Speichert die Daten in der MySQL-Datenbank
-   fetch("https://daocademy.infinityfreeapp.com/save.php", {
+  fetch("https://daocademy.infinityfreeapp.com/save.php", {
     method: "POST",
     mode: "cors", // Wichtig für CORS-Freigabe
     headers: {
@@ -177,9 +177,16 @@ document.getElementById("burnForm").addEventListener("submit", function(event) {
     },
     body: new URLSearchParams(new FormData(document.getElementById("burnForm"))).toString()
 })
-.then(response => response.text())
+.then(response => response.json()) // Antwort als JSON parsen
 .then(result => {
-    console.log("Antwort von save.php:", result); // Debugging
+    console.log("Antwort von save.php:", result);
+    if (result.status === "success") {
+        alert("✅ Daten erfolgreich gespeichert!");
+    } else {
+        alert("❌ Fehler beim Speichern: " + result.message);
+    }
+})
+.catch(error => console.error("Fehler:", error));
 
     var phoneNumber = document.getElementById("whatsapp").value.trim(); // Korrigierte ID
     var username = document.getElementById("username").value.trim();
