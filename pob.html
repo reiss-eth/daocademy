@@ -201,9 +201,12 @@ document.getElementById("burnForm").addEventListener("submit", function(event) {
         wallet: document.getElementById("wallet").value.trim(),
         coach: document.getElementById("coach").value.trim(),
         subscription: document.getElementById("subscription").value,
-        whatsapp: document.getElementById("whatsapp-number").value.trim()
+        whatsapp: document.getElementById("whatsapp-number").value.trim(),
+        dfs_amount: document.getElementById("burn-amount").innerText.trim(), // DFS-Token-Wert hinzufügen
+        consent_given: document.getElementById("whatsapp-consent").checked ? "yes" : "no" // Checkbox-Status
     })
 })
+
 .then(response => response.json())
 .then(result => {
     console.log("Antwort von save.php:", result);
@@ -217,16 +220,18 @@ document.getElementById("burnForm").addEventListener("submit", function(event) {
 
 });
 
-    var phoneNumber = document.getElementById("whatsapp").value.trim(); // Korrigierte ID
+   function validateForm() {
     var username = document.getElementById("username").value.trim();
     var walletAddress = document.getElementById("wallet").value.trim();
     var coachName = document.getElementById("coach").value.trim();
-    var subscriptionType = document.getElementById("subscription").value;
+    var phoneNumber = document.getElementById("whatsapp-number").value.trim();
 
-    if (!username || !walletAddress || !coachName || !phoneNumber) { // dfsTokenAmount entfernt
+    if (!username || !walletAddress || !coachName || !phoneNumber) {
         alert("Bitte fülle alle Felder aus, bevor du die Nachricht sendest.");
-        return;
+        return false; // ✅ Jetzt korrekt innerhalb einer Funktion
     }
+    return true;
+}
 
     var phoneRegex = /^\+?[0-9]{10,15}$/;
     if (!phoneRegex.test(phoneNumber)) {
