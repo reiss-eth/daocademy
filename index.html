@@ -314,6 +314,12 @@
 	.whatsapp-link:hover {
     	opacity: 0.8; /* Oder einen leichten Farbwechsel */
 	}
+	
+	.responsive-svg {
+  	max-width: 100%;
+  	height: auto;
+  	display: block; /* optional: verhindert kleine Lücken unterhalb von Inline-Elementen */
+	}
     }
     </style>
 </head>
@@ -339,20 +345,18 @@
     </ul>
   </nav>
 
-  <div class="hero-content">
-    <!-- Dein SVG-Logo oder Überschrift usw. -->
-    <svg width="600" height="200" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
-      <!-- Kreise -->
-      <circle cx="60" cy="50" r="30" fill="#8B5CF6" />
-      <circle cx="100" cy="50" r="30" fill="#14B8A6" opacity="0.8" />
-      <!-- Text -->
-      <text x="140" y="57" font-size="24" font-weight="700" fill="#ECEFF4" font-family="Montserrat, sans-serif">
-        DAOcademy
-      </text>
-    </svg>
+  <div style="width: 80%; margin: 0 auto; text-align: center;">
+  <svg class="responsive-svg" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="50" r="30" fill="#8B5CF6" />
+    <circle cx="100" cy="50" r="30" fill="#14B8A6" opacity="0.8" />
+    <text x="140" y="57" font-size="24" font-weight="700" fill="#ECEFF4" font-family="Montserrat, sans-serif">
+      DAOcademy
+    </text>
+  </svg>
 
     <p>Dein Weg zum dezentralen Lernen<br>
-       Willkommen in einer autonom gesteuerten Bildungsplattform auf Ethereum</p>
+	Willkommen in einer autonom gesteuerten<br>
+	Bildungsplattform auf Ethereum</p>
     <a href="#about" class="btn">Jetzt entdecken</a>
   </div>
 </header>
