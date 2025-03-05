@@ -86,34 +86,53 @@
     	transition: background-color 0.3s, color 0.3s;
 	}
 
-.btn:hover {
-    /* iOS-ähnliches Violett, z.B. #5856D6 */
-    background-color: #5856D6;
-    /* Weißer Text auf Violett */
-    color: #FFFFFF;
-}
+	.btn:hover {
+    	/* iOS-ähnliches Violett, z.B. #5856D6 */
+    	background-color: #5856D6;
+    	/* Weißer Text auf Violett */
+    	color: #FFFFFF;
+	}
 
         /* Nav */
         nav {
-            position: absolute;
-            top: 20px;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            padding: 0 40px;
-            z-index: 2;
-        }
-        nav a {
-            margin-left: 20px;
-            text-decoration: none;
-            color: #fff;
-            font-weight: 400;
-            transition: opacity 0.3s;
-        }
-        nav a:hover {
-            opacity: 0.7;
-        }
+  	position: absolute;
+  	top: 20px;
+  	left: 0;
+  	width: 100%;
+  	padding: 0 20px;
+  	z-index: 2;
+
+  	display: flex;
+  	justify-content: space-between;
+  	align-items: center;
+	}
+
+	/* Liste für die Navigation */
+	.nav-links {
+  	list-style: none;
+  	display: flex;       /* Desktop: alle Links nebeneinander */
+  	gap: 20px;
+	}
+
+	/* Jeder Link in der Liste */
+	.nav-links a {
+  	text-decoration: none;
+  	color: #fff;
+  	font-weight: 400;
+  	transition: opacity 0.3s;
+	}
+	.nav-links a:hover {
+  	opacity: 0.7;
+	}
+
+	.hamburger {
+  	display: none; /* standardmäßig ausblenden (am Desktop) */
+  	cursor: pointer;
+  	border: none;
+  	background: none;
+  	font-size: 1.5rem;
+  	color: #fff;
+	}
 
         /* Section Styles */
         section {
@@ -251,9 +270,36 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .about-content {
-                flex-direction: column;
-            }
+  	.about-content {
+    	flex-direction: column;
+  	}
+  	.hamburger {
+    	display: block;
+  	}
+  	.nav-links {
+    	position: absolute;
+    	top: 60px;
+    	right: 0;
+    	background-color: var(--clr-bg-secondary);
+    	flex-direction: column;
+    	gap: 10px;
+    	padding: 20px;
+    	border-radius: 8px;
+
+    	/* Anfangs unsichtbar */
+    	opacity: 0;
+    	pointer-events: none;
+    	transform: translateY(-10px);
+    	transition: opacity 0.3s, transform 0.3s;
+  	}
+
+  	nav.show-nav .nav-links {
+    	opacity: 1;
+    	pointer-events: auto;
+    	transform: translateY(0);
+  	}
+	}
+
             header {
                 height: 70vh;
             }
@@ -275,49 +321,42 @@
 
     <!-- Header / Hero Section -->
     <header>
-        <nav>
-        <a href="#about">Über DAOcademy</a>
-        <a href="#tokenomics">Tokenomics</a>
-	<a href="#whitepaper">Whitepaper</a>
-        <a href="#features">Features</a>
-        <a href="#communities">Communitys</a>
-        <a href="#team">Team</a>
-        <a href="#kontakt">Kontakt</a>
-    </nav>
-        <div class="hero-content">
+  <nav>
+    <!-- Hamburger-Button für Mobile -->
+    <button class="hamburger" id="hamburger-btn" aria-label="Menü öffnen oder schließen">
+      &#9776; <!-- Unicode für das "Hamburger"-Symbol -->
+    </button>
 
+    <!-- Navigation-Links (jetzt als Liste) -->
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">Über DAOcademy</a></li>
+      <li><a href="#tokenomics">Tokenomics</a></li>
+      <li><a href="#whitepaper">Whitepaper</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#communities">Communitys</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
 
+  <div class="hero-content">
+    <!-- Dein SVG-Logo oder Überschrift usw. -->
+    <svg width="600" height="200" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Kreise -->
+      <circle cx="60" cy="50" r="30" fill="#8B5CF6" />
+      <circle cx="100" cy="50" r="30" fill="#14B8A6" opacity="0.8" />
+      <!-- Text -->
+      <text x="140" y="57" font-size="24" font-weight="700" fill="#ECEFF4" font-family="Montserrat, sans-serif">
+        DAOcademy
+      </text>
+    </svg>
 
+    <p>Dein Weg zum dezentralen Lernen<br>
+       Willkommen in einer autonom gesteuerten Bildungsplattform auf Ethereum</p>
+    <a href="#about" class="btn">Jetzt entdecken</a>
+  </div>
+</header>
 
-<svg width="600" height="200" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
-  <!-- Hintergrund (optional) -->
-
-  <!-- Dekorative Kreise -->
-  <circle cx="60" cy="50" r="30" fill="#8B5CF6" />
-  <circle cx="100" cy="50" r="30" fill="#14B8A6" opacity="0.8" />
-
-  <!-- DAOcademy Text -->
-  <text x="140" y="57" font-size="24" font-weight="700" fill="#ECEFF4" font-family="Montserrat, sans-serif">
-    DAOcademy
-  </text>
-</svg>
-
-
-
-
-
-
-
-
-
-
-
-
-            <p>Dein Weg zum dezentralen Lernen<br />
-            Willkommen in einer autonom gesteuerten Bildungsplattform auf Ethereum</p>
-            <a href="#about" class="btn">Jetzt entdecken</a>
-        </div>
-    </header>
 
     <!-- About Section -->
     <section id="about" class="about">
@@ -497,6 +536,19 @@
            rel="noopener noreferrer">DAOcademy über WhatsApp beitreten</a>
     </p>
 </section>
+
+
+<script>
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const nav = document.querySelector('nav');
+
+  hamburgerBtn.addEventListener('click', () => {
+    // toggelt die Klasse "show-nav" am <nav>-Element
+    nav.classList.toggle('show-nav');
+  });
+</script>
+
+
 
     <!-- Footer -->
     <footer>
