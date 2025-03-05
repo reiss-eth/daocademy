@@ -1,95 +1,506 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeFi Syndicate</title>
-	<link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DAOcademy - Dein Weg zum dezentralen Lernen</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
+
+        :root {
+            --clr-bg: #0A0E13;
+            --clr-bg-secondary: #191F2B;
+            --clr-primary: #8B5CF6; /* Violett/Aubergine */
+            --clr-accent: #14B8A6; /* Teal */
+            --clr-text: #ECEFF4;
+            --clr-subtext: #9CA3AF;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Orbitron', sans-serif;
         }
+
         body {
-            background-color: #121212;
-            color: #ffffff;
-            text-align: center;
-            padding: 40px;
+            font-family: 'Montserrat', sans-serif;
+            background: var(--clr-bg);
+            color: var(--clr-text);
         }
+
+        /* Header / Hero Section */
         header {
+            position: relative;
+            height: 90vh;
+            background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent));
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            text-align: center;
+            overflow: hidden;
         }
-        .logotop {
-            max-width: 150px; /* Standardgröße für das obere Logo */
-            height: auto;
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2), transparent);
+            mix-blend-mode: screen;
+            animation: pulse 6s infinite;
         }
-        .logobottom {
-            max-width: 40px; /* Kleineres unteres Logo */
-            height: auto;
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+            }
         }
-        .container {
-            max-width: 600px;
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
         }
-        h1, h2 {
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+        }
+        .btn {
+    	display: inline-block;
+    	padding: 15px 30px;
+    	background-color: #AFEEEE;
+    	color: #0A0E13;
+    	text-decoration: none;
+    	font-weight: 700;
+    	border-radius: 8px;
+    	box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    	transition: background-color 0.3s, color 0.3s;
+	}
+
+.btn:hover {
+    /* iOS-ähnliches Violett, z.B. #5856D6 */
+    background-color: #5856D6;
+    /* Weißer Text auf Violett */
+    color: #FFFFFF;
+}
+
+        /* Nav */
+        nav {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 40px;
+            z-index: 2;
+        }
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 400;
+            transition: opacity 0.3s;
+        }
+        nav a:hover {
+            opacity: 0.7;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .section-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            color: var(--clr-subtext);
+        }
+
+        /* About Section */
+        .about {
+            background-color: var(--clr-bg-secondary);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin-top: -50px;
+            position: relative;
+            z-index: 2;
+        }
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+        }
+        .about-text {
+            max-width: 600px;
+        }
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        .about-text p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: var(--clr-text);
+        }
+        .about-image {
+            max-width: 400px;
+        }
+        .about-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        /* Tokenomics & Co. */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .info-card {
+            background-color: var(--clr-bg-secondary);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+        .info-card h4 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--clr-primary);
+        }
+        .info-card p {
+            font-size: 1rem;
+            color: var(--clr-text);
+        }
+        /* Team Section */
+        .team-grid {
+    	display: flex;
+    	justify-content: center;
+    	align-items: flex-start; /* oder center, wenn du sie vertikal mittig haben möchtest */
+    	gap: 30px;
+    	margin-top: 40px;
+    	flex-wrap: wrap;
+	}
+        .team-member {
+    	background-color: var(--clr-bg-secondary);
+    	border-radius: 10px;
+    	box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    	padding: 20px;
+    	width: 380px;
+    	height: 250px;
+    	box-sizing: border-box;
+    	text-align: center;
+    	transition: transform 0.3s, box-shadow 0.3s; /* Wichtig für Hover-Effekt */
+	}
+	.team-member:hover {
+    	transform: scale(1.03);
+    	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+	}
+        .team-member img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
             margin-bottom: 15px;
         }
-        p {
-            margin-bottom: 20px;
-            line-height: 1.6;
-            color: #b0b0b0;
+        .team-member h5 {
+            margin-bottom: 5px;
+            font-size: 1.2rem;
         }
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background: #ff3b3b;
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-            margin: 10px;
+        .team-member p {
+            font-size: 0.9rem;
+            color: var(--clr-subtext);
         }
-        .button:hover {
-            background: #e63232;
-        }
+
+        /* Footer */
         footer {
-            margin-top: 40px;
-            font-size: 14px;
-            color: #777;
+            background-color: var(--clr-bg-secondary);
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
         }
+        footer p {
+            font-size: 0.9rem;
+            color: var(--clr-subtext);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-content {
+                flex-direction: column;
+            }
+            header {
+                height: 70vh;
+            }
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+	.whatsapp-link {
+    	color: var(--clr-primary);
+    	text-decoration: none;
+    	font-weight: 700;
+	}
+	.whatsapp-link:hover {
+    	opacity: 0.8; /* Oder einen leichten Farbwechsel */
+	}
+    }
     </style>
 </head>
 <body>
+
+    <!-- Header / Hero Section -->
     <header>
-        <img src="DFS-Logo-transparent.png" alt="DeFi Syndicate Logo" class="logotop">
+        <nav>
+        <a href="#about">Über DAOcademy</a>
+        <a href="#tokenomics">Tokenomics</a>
+	<a href="#whitepaper">Whitepaper</a>
+        <a href="#features">Features</a>
+        <a href="#communities">Communitys</a>
+        <a href="#team">Team</a>
+        <a href="#kontakt">Kontakt</a>
+    </nav>
+        <div class="hero-content">
+
+
+
+
+<svg width="600" height="200" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hintergrund (optional) -->
+
+  <!-- Dekorative Kreise -->
+  <circle cx="60" cy="50" r="30" fill="#8B5CF6" />
+  <circle cx="100" cy="50" r="30" fill="#14B8A6" opacity="0.8" />
+
+  <!-- DAOcademy Text -->
+  <text x="140" y="57" font-size="24" font-weight="700" fill="#ECEFF4" font-family="Montserrat, sans-serif">
+    DAOcademy
+  </text>
+</svg>
+
+
+
+
+
+
+
+
+
+
+
+
+            <p>Dein Weg zum dezentralen Lernen<br />
+            Willkommen in einer autonom gesteuerten Bildungsplattform auf Ethereum</p>
+            <a href="#about" class="btn">Jetzt entdecken</a>
+        </div>
     </header>
-    <div class="container">
-        <h1>DeFi Syndicate</h1>
-        <p>Eine dezentrale Community für Wissen, Wachstum und finanzielle Freiheit durch DeFi.</p>
-      <br>
-        <h2>Unsere Mission</h2>
-        <p>Wir bauen eine starke, unabhängige Gemeinschaft auf, in der jeder profitieren kann. Kein Verkaufsdruck, keine zentrale Kontrolle – nur echtes DeFi-Wissen.</p>
-      <br>
-        <h2>Trete unserer Community bei</h2>
-        <p>Diskutiere mit anderen Mitgliedern, teile dein Wissen und erfahre mehr über unsere exklusiven Inhalte.</p>
-        <a href="https://chat.whatsapp.com/Fpeg56eSE4eFu9Ete2BC83" class="button" style="margin-bottom: 30px;">Jetzt beitreten</a>
-      <br><br>
-        <h2>DFS Token</h2>
-        <p>Hier findest du alle Informationen zu unserem DFS Token.</p>
-    <a href="dfs.html" class="button">DFS Token Übersicht</a>
-    </div>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="about-content">
+            <div class="about-text">
+                <h3>Was ist DAOcademy?</h3>
+                <p>
+                    DAOcademy ist ein revolutionäres Lernökosystem, das vollständig durch Smart Contracts und 
+                    Community-Governance gesteuert wird. Keine Vermittler, keine undurchsichtigen Gebühren. 
+                    Bei uns verbinden sich Coaches und Lernende direkt innerhalb einer Community miteinander, unterstützt durch die Kraft 
+                    dezentraler Technologie.
+                </p>
+                <p>
+                    Unsere Vision? Eine Welt, in der Bildung frei fließt, ohne zentrale Kontrolle oder starre Richtlinien. 
+                    Jeder, der Wissen teilt, wird fair entlohnt. Jeder, der lernen möchte, zahlt nur für den 
+                    eigentlichen Kurs – und unterstützt gleichzeitig das gesamte DAO-Ökosystem.
+                </p>
+            </div>
+            <div class="about-image">
+                <img src="daocademy_logo2.gif" alt="Was ist DAOcademy" style="width: 150px; height: auto;"/>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics / Info Section -->
+    <section id="tokenomics">
+        <h2 class="section-title">Tokenomics</h2>
+        <p class="section-subtitle">Deflationärer BURN-Token & automatisierte Ausschüttungen</p>
+        <div class="info-grid">
+            <div class="info-card">
+                <h4>Deflationärer Token</h4>
+                <p>
+                    Wir setzen auf den BURN-Token (ERC-20) als einziges Zahlungsmittel in unserer Plattform. 
+                    Bei jedem Kurskauf werden Token dauerhaft verbrannt, wodurch das Angebot sinkt und 
+                    ein nachhaltiges Wertwachstum unterstützt wird.
+                </p>
+            </div>
+            <div class="info-card">
+                <h4>Automatische Belohnungen</h4>
+                <p>
+                    Coaches erhalten regelmäßig Ausschüttungen direkt aus der DAO-Treasury. 
+                    So profitieren sie von jedem verbrannten Token und unterstützen gleichzeitig den 
+                    deflationären Mechanismus.
+                </p>
+            </div>
+            <div class="info-card">
+                <h4>On-Chain Governance</h4>
+                <p>
+                    Alle wichtigen Entscheidungen – von Treasury-Nutzung bis zu Parametern 
+                    für Ausschüttungen – werden gemeinsam per DAO-Governance entschieden.
+                </p>
+            </div>
+            <div class="info-card">
+                <h4>Langfristige Stabilität</h4>
+                <p>
+                    Da die DAO stets einen großen Token-Anteil verwaltet, bleibt das System stabil. 
+                    Das deflationäre Konzept fördert einen fortlaufenden Wertanstieg, von dem alle profitieren.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+	<!-- Whitepaper Section -->
+	<section id="whitepaper">
+    	<h2 class="section-title">DAOcademy Whitepaper</h2>
+    	<p class="section-subtitle">Alle Details zu unserer Vision & Umsetzung</p>
+    	<p>
+        <a href="DAOcademy-Whitepaper.pdf"
+           class="btn"
+           target="_blank"
+           rel="noopener noreferrer">
+            Whitepaper hier herunterladen (PDF)
+        </a>
+    	</p>
+	</section>
+
+
+
+    <!-- Features / Highlights -->
+    <section id="features">
+        <h2 class="section-title">Features & Vorteile</h2>
+        <p class="section-subtitle">Warum DAOcademy?</p>
+        <div class="info-grid">
+            <div class="info-card">
+                <h4>Direkte Vernetzung</h4>
+                <p>
+                    Schluss mit Vermittlern: Coaches und Lernende tauschen sich 
+                    direkt über die Plattform aus. Vollständige Transparenz und Freiheit.
+                </p>
+            </div>
+            <div class="info-card">
+                <h4>Automatisierte Smart Contracts</h4>
+                <p>
+                    Vom Kurskauf bis zur monatlichen Ausschüttung an Coaches – 
+                    alles läuft automatisiert und unveränderbar in Smart Contracts.
+                </p>
+            </div>
+            <div class="info-card">
+                <h4>Community-Driven</h4>
+                <p>
+                    Ob du ein Kursanbieter bist oder ein Community-Mitglied – du hast ein Stimmrecht 
+                    und kannst dich aktiv an der Entwicklung der Plattform beteiligen.
+                </p>
+            </div>
+            <div class="info-card">
+                <h4>Nachvollziehbare On-Chain-Daten</h4>
+                <p>
+                    Alle Transaktionen sind öffentlich einsehbar. Das schafft Vertrauen, 
+                    vereinfacht Prüfungen und verhindert Missbrauch.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+
+	<!-- Communitys Section -->
+	<section id="communities">
+    	<h2 class="section-title">Communitys auf DAOcademy</h2>
+    	<p class="section-subtitle">Diese Communitys sind bereits dabei</p>
+    	<div class="info-grid">
+        <div class="info-card">
+        <h4>DeFi Syndicate</h4>
+        <p>
+        Eine DeFi-orientierte Community, die sich voll auf Blockchain
+        und dezentrale Finanzlösungen konzentriert. Hier lernst du alles
+        über Yield Farming, Liquidity Mining und mehr.
+        </p>
+        </div>
+        <div class="info-card">
+            <h4>financial freedom</h4>
+            <p>
+                Eine wachsende Community mit Fokus auf finanzieller Bildung,
+                Investments und passiven Einkommensquellen. Ideal für alle, die
+                ihre finanzielle Unabhängigkeit anstreben.
+            </p>
+        </div>
+    	</div>
+	</section>
+
+
+    <!-- Team Section -->
+    <section id="team">
+        <h2 class="section-title">Unser Team</h2>
+        <p class="section-subtitle">Mitgestaltet durch die Community</p>
+        <div class="team-grid">
+            
+		<div class="team-member">
+                <img src="team_daniel.jpg" alt="Team Mitglied" />
+                <h5>Daniel</h5>
+                <p>DAO Strategy Lead<br>Smart Contract & Web Development</p>
+            </div>
+            
+		<div class="team-member">
+                <img src="team_asita.jpg" alt="Team Mitglied" />
+                <h5>Asita</h5>
+                <p>Social Media Marketing<br>Verification & Membership Lead<br>Customer Support</p>
+            </div>
+            
+
+        </div>
+    </section>
+
+    <!-- Kontakt Section -->
+    <section id="kontakt">
+    <h2 class="section-title">Kontakt & Teilnahme</h2>
+    <p class="section-subtitle">Du willst mehr erfahren oder bei uns einsteigen?</p>
+    <p>
+        Trete unserer DAO bei, werde Coach oder Team-Member – oder beides! 
+        Zusammen gestalten wir die Zukunft der Bildung.
+    </p><br>
+    <p>
+        <a href="https://chat.whatsapp.com/H1dwpV6fOMlKsoJwPM5ygp" 
+           class="btn"
+           target="_blank" 
+           rel="noopener noreferrer">DAOcademy über WhatsApp beitreten</a>
+    </p>
+</section>
+
+    <!-- Footer -->
     <footer>
-	<img src="logo.png" alt="DeFi Syndicate Logo" class="logobottom">
-        <p>&copy; 2025 DeFi Syndicate | Dezentral. Gemeinschaftlich. Stark.</p>
+        <p>&copy; 2025 DAOcademy. Build on Ethereum</p>
     </footer>
 </body>
 </html>
