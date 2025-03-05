@@ -84,9 +84,10 @@
   	border-radius: 8px;
   	box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   	transition: background-color 0.3s, color 0.3s;
-  	position: relative; /* Stellt sicher, dass der Button nicht überdeckt wird */
-  	z-index: 10;
+  	position: relative; /* Verhindert Überdeckung */
+ 	z-index: 100; /* Setzt ihn über andere Elemente */
 	}
+
 
 	.btn:hover {
     	/* iOS-ähnliches Violett, z.B. #5856D6 */
@@ -155,14 +156,15 @@
         }
 
         /* About Section */
-        .about {
-            background-color: var(--clr-bg-secondary);
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            margin-top: -50px;
-            position: relative;
-            z-index: 2;
-        }
+   	.about {
+  	background-color: var(--clr-bg-secondary);
+  	border-radius: 10px;
+  	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  	margin-top: -50px; /* Hebt das Element leicht an */
+  	position: relative; /* Stellt sicher, dass es unter dem Button bleibt */
+  	z-index: 1; /* Setzt es unter den Button */
+	}
+
         .about-content {
             display: flex;
             flex-wrap: wrap;
