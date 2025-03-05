@@ -75,15 +75,17 @@
             margin-bottom: 30px;
         }
         .btn {
-    	display: inline-block;
-    	padding: 15px 30px;
-    	background-color: #AFEEEE;
-    	color: #0A0E13;
-    	text-decoration: none;
-    	font-weight: 700;
-    	border-radius: 8px;
-    	box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    	transition: background-color 0.3s, color 0.3s;
+  	display: inline-block;
+  	padding: 15px 30px;
+  	background-color: #AFEEEE;
+  	color: #0A0E13;
+  	text-decoration: none;
+  	font-weight: 700;
+  	border-radius: 8px;
+  	box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  	transition: background-color 0.3s, color 0.3s;
+  	position: relative; /* Stellt sicher, dass der Button nicht überdeckt wird */
+  	z-index: 10;
 	}
 
 	.btn:hover {
@@ -277,27 +279,24 @@
     	display: block;
   	}
   	.nav-links {
-    	position: absolute;
-    	top: 60px;
-    	right: 0;
-    	background-color: var(--clr-bg-secondary);
-    	flex-direction: column;
-    	gap: 10px;
-    	padding: 20px;
-    	border-radius: 8px;
+  	position: absolute;
+  	top: 60px;
+  	right: 0;
+  	background-color: var(--clr-bg-secondary);
+  	flex-direction: column;
+  	gap: 10px;
+  	padding: 20px;
+  	border-radius: 8px;
 
-    	/* Anfangs unsichtbar */
-    	opacity: 0;
-    	pointer-events: none;
-    	transform: translateY(-10px);
-    	transition: opacity 0.3s, transform 0.3s;
-  	}
+  	opacity: 0;
+  	pointer-events: none;
+  	transform: translateY(-10px);
+  	transition: opacity 0.3s, transform 0.3s;
 
-  	nav.show-nav .nav-links {
-    	opacity: 1;
-    	pointer-events: auto;
-    	transform: translateY(0);
-  	}
+  	/* Hier: Z-Index setzen, damit das Menü nicht über dem Button bleibt */
+  	z-index: 1000;
+	}
+
 	}
 
             header {
@@ -354,9 +353,9 @@
     </text>
   </svg>
 
-    	<p>Dein Weg zum dezentralen Lernen</p>
+    	<h3><p>Dein Weg zum dezentralen Lernen</p>
 	<p>Willkommen in einer autonom gesteuerten</p>
-	<p>Bildungsplattform auf Ethereum</p><br>
+	<p>Bildungsplattform auf Ethereum</p></h3><br>
     <a href="#about" class="btn">Jetzt entdecken</a>
   </div>
 </header>
