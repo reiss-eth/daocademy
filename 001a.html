@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeFi Syndicate Community Zugang</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
+
+    <style>
+
+
+
+/* Google Font: Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* Allgemeine Stile */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f0f8ff, #e6f0ff); /* Leichtes Blau */
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 400px;
+    margin: auto;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #d0e2ff; /* Sanftes Blau */
+}
+
+.containerconect {
+    background: #E0ECFF;
+    padding: 10px;
+    border-radius: 20px;
+    max-width: 400px;
+    margin: auto;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #d0e2ff; /* Sanftes Blau */
+}
+
+/* Überschriften */
+h2 {
+    font-size: 22px;
+    color: #0056b3; /* Dunkles Blau */
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 18px;
+    color: #444;
+    font-weight: normal;
+}
+
+p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Eingabefelder */
+select, button, input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Speziell für das Preisfeld */
+#ethAmount {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em; 
+    background: #f0f8ff;
+    color: #333;
+    border: none;
+}
+
+/* Allgemeine Buttons */
+button, a {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 8px;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* Wallet Connect Button */
+.connect-btn {
+    background: #66B2FF;
+    color: white;
+}
+
+.connect-btn:hover {
+    background: #0056b3;
+}
+
+/* Swap Button */
+.swap-btn {
+    background: #28a745; /* Grüner Akzent */
+    color: white;
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+}
+
+.swap-btn:hover {
+    background: #218838;
+}
+
+/* Hidden Elemente */
+.hidden {
+    display: none;
+}
+
+/* Dropdown Menü */
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.dropdown-button {
+    width: 100%;
+    padding: 10px;
+    background: #f0f8ff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.dropdown-button:hover {
+    background: #d6e6ff;
+}
+
+.dropdown-list {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+    z-index: 100;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-list li {
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    color: #333;
+}
+
+.dropdown-list li:hover {
+    background: #d6e6ff;
+}
+
+/* Popup Styling */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    max-height: 95vh;
+    overflow-y: auto;
+    border: 2px solid #007BFF;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Popup Container */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    color: #333;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    z-index: 1000;
+    width: 90%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 2px solid #007BFF;
+    box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Popup Titel */
+.popup h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #0056b3; /* Dunkles Blau */
+    margin-bottom: 15px;
+}
+
+/* Popup Text */
+.popup p {
+    font-size: 16px;
+    color: #444;
+    line-height: 1.6;
+}
+
+/* Popup Sektionen */
+.popup div {
+    background: #f0f8ff;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #d0e2ff;
+}
+
+/* Unterüberschriften im Popup */
+.popup h3 {
+    font-size: 18px;
+    color: #007BFF;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Buttons im Popup */
+.popup button, 
+.popup a {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 8px;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* WhatsApp Button */
+.popup .whatsapp-btn {
+    display: block; 
+          padding: 12px 15px; 
+          background: linear-gradient(135deg, #25D366, #1DA851); 
+          color: white; 
+          border-radius: 8px; 
+          text-align: center; 
+          text-decoration: none; 
+          font-weight: 600;
+          font-size: 16px;
+          box-shadow: 0px 5px 10px rgba(37, 211, 102, 0.3);
+          transition: all 0.3s ease;
+}
+
+.popup .whatsapp-btn:hover {
+    background: #1da851;
+}
+
+/* Community Button */
+.popup .community-btn {
+    	  display: block; 
+          padding: 12px 15px; 
+          background: linear-gradient(135deg, #0084FF, #0056B3); 
+          color: white; 
+          border-radius: 8px; 
+          text-align: center; 
+          text-decoration: none; 
+          font-weight: 600;
+          font-size: 16px;
+          box-shadow: 0px 5px 10px rgba(0, 132, 255, 0.3);
+          transition: all 0.3s ease;
+}
+
+.popup .community-btn:hover {
+    background: #0056b3;
+}
+
+/* Schließen Button */
+.popup .close-btn {
+    background: #dc3545;
+    color: white;
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+}
+
+.popup .close-btn:hover {
+    background: #c82333;
+}
+
+/* QR-Code Styling */
+.popup img {
+    margin-top: 10px;
+    width: 140px;
+    height: 140px;
+    border-radius: 8px;
+    border: 2px solid #007BFF;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .popup {
+        max-width: 95%;
+        padding: 20px;
+    }
+
+    .popup h2 {
+        font-size: 20px;
+    }
+
+    .popup h3 {
+        font-size: 16px;
+    }
+
+    .popup p {
+        font-size: 14px;
+    }
+
+    .popup button, 
+    .popup a {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .popup img {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+
+/* Schließen Button */
+.close-btn {
+    background: #dc3545;
+    color: white;
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+}
+
+.close-btn:hover {
+    background: #c82333;
+}
+
+/* QR-Code Styling */
+img {
+    margin-top: 10px;
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    border: 2px solid #007BFF;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .container {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    h3 {
+        font-size: 16px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    button, a {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+
+
+ <b><u>DeFi Syndicate Community Zugang</u></b>
+
+<div class="containerconect">
+   
+    <button id="connectWallet" class="connect-btn" onclick="connectWallet()">🔗 Wallet verbinden</button>
+    <p id="walletStatus">⛓️‍💥 Nicht verbunden ❌</p>
+	</div>
+
+	<div class="container">
+    <b>🌍 Community:</b>
+    <input type="text" value="DeFi Syndicate (001)" id="communityName" readonly style="padding: 10px; width: 100%; background: #333; color: #fff; border: none; text-align: center; font-weight: bold;">
+
+  <div class="custom-dropdown">
+    <br><b>📚 Wähle dein Level:</b>
+    <button class="dropdown-button" id="levelButton">-- Level wählen --</button>
+    <ul class="dropdown-list" id="levelList">
+        <li data-value="Fundamentale">Fundamentale</li>
+        <li data-value="Breakthrough">Breakthrough</li>
+        <li data-value="Elite">Elite</li>
+    </ul>
+    <input type="hidden" id="level">
+</div>
+
+<div class="custom-dropdown hidden" id="accessDiv">
+    <br><b>⏳ Wähle deinen Zugang:</b>
+    <button class="dropdown-button" id="accessButton">-- Zugangs Dauer wählen --</button>
+    <ul class="dropdown-list" id="accessList">
+        <li data-value="Monats Zugang">Monats Zugang</li>
+        <li data-value="Jahres Zugang">Jahres Zugang</li>
+        <li data-value="Lifetime Zugang">Lifetime Zugang</li>
+    </ul>
+    <input type="hidden" id="access">
+</div>
+
+<div id="priceDiv" class="hidden">
+    <br><b>💰 Preis:</b>
+    <input id="ethAmount" type="text" readonly>
+    <br><button id="swapButton" class="swap-btn" disabled onclick="swapUSDCForTokens()">🔥 USDC senden & Community beitreten</button>
+</div>
+
+</div>
+
+<script>
+    let provider, signer;
+const SEPOLIA_CHAIN_ID = 11155111;
+const UNISWAP_ROUTER_ADDRESS = "0xC532a74256D3Db42D0Bf7a0400fEFDbad7694008";
+const USDC_ADDRESS = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238";
+const TOKEN_ADDRESS = "0xBE7CD7FB63Fef852A5C142949CAF144d5B940CB1";
+const RECEIVER_ADDRESS = "0x1dead0000000000000000000000000000000dead";
+
+
+let walletAddress = ""; // Globale Variable für die Wallet-Adresse
+
+async function connectWallet() {
+    if (!window.ethereum) {
+        alert("Bitte MetaMask installieren!");
+        return;
+    }
+
+    try {
+        provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+        await provider.send("eth_requestAccounts", []);
+        signer = provider.getSigner();
+
+        const network = await provider.getNetwork();
+console.log("🔍 Aktuelles Netzwerk:", network.chainId);
+
+if (network.chainId !== SEPOLIA_CHAIN_ID) {
+    console.log("🔄 Wechsel zu Sepolia erforderlich...");
+    await switchToSepolia();
+} else {
+    console.log("✅ Wallet ist bereits auf Sepolia.");
+}
+
+
+        walletAddress = await signer.getAddress(); // Wallet-Adresse abrufen und speichern
+       document.getElementById("walletStatus").innerText = `🔗 Verbunden: ${walletAddress}`;
+
+        document.getElementById("swapButton").disabled = false;
+    } catch (error) {
+        console.error("Wallet-Verbindung fehlgeschlagen:", error);
+        alert("⛓️‍💥 Wallet Verbindung fehlgeschlagen.❌ Überprüfe die Konsole für Details.");
+    }
+}
+
+async function switchToSepolia() {
+    try {
+        console.log("🔄 Versuche, zur Sepolia Chain zu wechseln...");
+        await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: "0x" + SEPOLIA_CHAIN_ID.toString(16) }],
+        });
+        console.log("✅ Erfolgreich auf Sepolia gewechselt!");
+    } catch (switchError) {
+        console.error("❌ Netzwerkwechsel fehlgeschlagen:", switchError);
+
+        if (switchError.code === 4902) { // Sepolia ist noch nicht in MetaMask
+            console.log("➕ Sepolia-Netzwerk ist nicht hinzugefügt. Versuche, es hinzuzufügen...");
+            try {
+                await window.ethereum.request({
+                    method: "wallet_addEthereumChain",
+                    params: [{
+                        chainId: "0x" + SEPOLIA_CHAIN_ID.toString(16),
+                        chainName: "Ethereum Sepolia Testnet",
+                        nativeCurrency: {
+                            name: "SepoliaETH",
+                            symbol: "ETH",
+                            decimals: 18
+                        },
+                        rpcUrls: ["https://endpoints.omniatech.io/v1/eth/sepolia/public"],
+                        blockExplorerUrls: ["https://sepolia.etherscan.io"]
+                    }],
+                });
+                console.log("✅ Sepolia wurde erfolgreich hinzugefügt!");
+            } catch (addError) {
+                console.error("❌ Fehler beim Hinzufügen von Sepolia:", addError);
+                alert("⚠️ Dein Wallet erlaubt das automatische Hinzufügen von Sepolia nicht. Bitte wechsle das Netzwerk manuell in MetaMask.");
+            }
+        } else {
+            alert("⚠️ Deine Wallet erlaubt den automatischen Netzwerkwechsel nicht. Bitte öffne MetaMask und wechsle manuell zu Ethereum Sepolia.");
+        }
+    }
+}
+
+
+
+
+
+
+
+function updatePrice() {
+    const level = document.getElementById("level").value;
+    const access = document.getElementById("access").value;
+    let price = "0.0";
+
+    if (!level) {
+        document.getElementById("accessDiv").classList.add("hidden");
+        document.getElementById("priceDiv").classList.add("hidden");
+        return;
+    }
+
+    document.getElementById("accessDiv").classList.remove("hidden");
+
+    if (level && access) {
+        if (level === "Fundamentale") {
+            if (access === "Monats Zugang") price = "0.03";
+            if (access === "Jahres Zugang") price = "0.3";
+            if (access === "Lifetime Zugang") price = "0.9";
+        }
+        if (level === "Breakthrough") {
+            if (access === "Monats Zugang") price = "0.05";
+            if (access === "Jahres Zugang") price = "0.5";
+            if (access === "Lifetime Zugang") price = "1.5";
+        }
+        if (level === "Elite") {
+            if (access === "Monats Zugang") price = "0.1";
+            if (access === "Jahres Zugang") price = "1.0";
+            if (access === "Lifetime Zugang") price = "3.0";
+        }
+
+        document.getElementById("ethAmount").value = price;
+        document.getElementById("priceDiv").classList.remove("hidden");
+        document.getElementById("swapButton").disabled = false;
+    } else {
+        document.getElementById("priceDiv").classList.add("hidden");
+        document.getElementById("swapButton").disabled = true;
+    }
+}
+
+
+
+async function swapUSDCForTokens() {
+    if (!signer) {
+        alert("Bitte verbinde zuerst dein Wallet!");
+        return;
+    }
+
+    const usdcAmount = document.getElementById("ethAmount").getAttribute("data-value");
+    if (!usdcAmount || usdcAmount === "0.0") {
+        alert("Bitte wähle eine gültige Zugangsstufe!");
+        return;
+    }
+
+    // 🟢 Button-Status auf "Loading" setzen
+    const swapButton = document.getElementById("swapButton");
+    swapButton.disabled = true;
+    swapButton.innerText = "⏳ Transaktion läuft...";
+
+    try {
+        const router = new ethers.Contract(
+            UNISWAP_ROUTER_ADDRESS,
+            [
+                "function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external",
+                "function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory)"
+            ],
+            signer
+        );
+
+        const usdcContract = new ethers.Contract(
+            USDC_ADDRESS,
+            [
+                "function approve(address spender, uint256 amount) public returns (bool)", 
+                "function allowance(address owner, address spender) public view returns (uint256)",
+                "function balanceOf(address account) public view returns (uint256)"
+            ],
+            signer
+        );
+
+        const amountIn = ethers.utils.parseUnits(usdcAmount, 6);
+        const deadline = Math.floor(Date.now() / 1000) + 600;
+        const walletAddress = await signer.getAddress();
+
+        // 🟢 Prüfen, ob genug USDC im Wallet ist
+        const balance = await usdcContract.balanceOf(walletAddress);
+        if (balance.lt(amountIn)) {
+            alert("❌ Nicht genug USDC im Wallet!");
+            throw new Error("Nicht genug USDC im Wallet.");
+        }
+
+        // 🟢 Prüfen, ob Genehmigung bereits erteilt wurde
+        const allowance = await usdcContract.allowance(walletAddress, UNISWAP_ROUTER_ADDRESS);
+        if (allowance.lt(amountIn)) {
+            console.log("⚠️ Genehmigung wird erteilt...");
+            const approvalTx = await usdcContract.approve(UNISWAP_ROUTER_ADDRESS, ethers.constants.MaxUint256);
+            await approvalTx.wait();
+        }
+
+        console.log("🔄 Berechne Slippage...");
+        const path = [USDC_ADDRESS, TOKEN_ADDRESS];
+        const amounts = await router.getAmountsOut(amountIn, path);
+        const slippageTolerance = 95; // Dynamische Slippage (5% Sicherheitspuffer)
+        const amountOutMin = amounts[1].mul(slippageTolerance).div(100);
+
+        console.log("🔄 Starte Swap USDC → BURN direkt an Dead-Adresse...");
+
+        // 🟢 Swap-Transaktion ausführen
+        const swapTx = await router.swapExactTokensForTokens(
+            amountIn,
+            amountOutMin,
+            path,
+            RECEIVER_ADDRESS,
+            deadline
+        );
+
+        const receipt = await swapTx.wait();
+        console.log("✅ Swap erfolgreich! BURN wurde direkt an die Dead-Adresse gesendet.", receipt);
+
+        // 🟢 Popup anzeigen mit Transaktionsdaten
+        showPopup(swapTx.hash, usdcAmount);
+
+    } catch (error) {
+        console.error("❌ Swap fehlgeschlagen:", error);
+        alert("❌ Fehler beim Swap: " + error.message);
+    } finally {
+        // 🔹 Button zurücksetzen, unabhängig davon, ob die Transaktion erfolgreich war oder fehlgeschlagen ist
+        swapButton.disabled = false;
+        swapButton.innerText = "🔥 USDC senden & Community beitreten";
+    }
+}
+
+
+
+
+
+
+
+    function showPopup(txHash, ethAmount) {
+    const level = document.getElementById("level").value; // Gewähltes Level abrufen
+    const access = document.getElementById("access").value; // Zugangs-Dauer abrufen
+
+    if (!access) {
+        console.error("Fehler: access ist leer oder undefined.");
+        alert("Es scheint ein Fehler bei der Auswahl der Zugangsdauer vorzuliegen.");
+        return;
+    }
+
+
+    let communityLink = "";
+    // WhatsApp-Community-Link abhängig vom gewählten Level setzen
+    if (level === "Fundamentale") {
+        communityLink = "https://chat.whatsapp.com/fundamental";
+    } else if (level === "Breakthrough") {
+        communityLink = "https://chat.whatsapp.com/breakthrough";
+    } else if (level === "Elite") {
+        communityLink = "https://chat.whatsapp.com/Elite";
+    }
+
+   const whatsappMessage = `*DeFi Syndicate Beitritt*%0A%0A`
+    + `Ich habe für *${ethAmount} USDC* einen *${access}* für DeFi Syndicate im *${level}* Level erworben.%0A%0A`
+    + `🧾 Mein Zahlungsnachweis: %0A https://sepolia.etherscan.io/tx/${txHash}%0A%0A`
+    + `🗃️ Meine BURN History: %0A https://sepolia.etherscan.io/token/0xbe7cd7fb63fef852a5c142949caf144d5b940cb1?a=${walletAddress}`;
+
+    const whatsappLink = `https://wa.me/4915129147194?text=${encodeURIComponent(decodeURIComponent(whatsappMessage))}`;
+    const qrWhatsAppMessage = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(whatsappLink)}`;
+    const qrCommunityLink = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(communityLink)}`;
+
+
+    const popup = document.createElement("div");
+    popup.className = "popup";
+    popup.innerHTML = `
+        <h3>✅ Zahlung erfolgreich!</h3>
+        Du hast für ${ethAmount} USDC einen ${access} für DeFi Syndicate im ${level} Level erworben.<br><br>
+	Bitte führe nun die beiden unten aufgeführten Schritte aus, um deiner erworbenen<br>⬇️ Community beizutreten. ⬇️<br>
+
+            <!-- Link zum Zahlungsnachweis senden -->
+           <div style="background: linear-gradient(135deg, #f0f8ff, #e6f0ff); 
+            padding: 5px; 
+            border-radius: 12px; 
+            margin-bottom: 1px; 
+            border: 1px solid #d0e2ff; 
+            box-shadow: 0px 4px 10px rgba(0, 86, 179, 0.15);">
+
+           <h3><span style="text-decoration: underline;">Schritt 1:</span></h3>
+           <p>📩 Zahlungsnachweis einreichen</p>
+                <a id="whatsappButton" href="${whatsappLink}" target="_blank" class="whatsapp-btn">
+		📲 Per WhatsApp senden</a>
+		
+
+
+                <p>📸 Oder scanne den QR-Code:</p>
+                <img src="${qrWhatsAppMessage}" style="width: 200px; height: 200px;">
+            </div>
+
+            <!-- Link zur Community beitreten -->
+            <div style="background: linear-gradient(135deg, #f0f8ff, #e6f0ff); 
+            padding: 5px; 
+            border-radius: 12px; 
+            margin-bottom: 1px; 
+            border: 1px solid #d0e2ff; 
+            box-shadow: 0px 4px 10px rgba(0, 86, 179, 0.15);">
+
+            <h3><span style="text-decoration: underline;">Schritt 2:</span></h3>
+	    <p>DeFi Syndicate - ${level} beitreten</p>
+            <a id="communityButton" href="${communityLink}" target="_blank" class="community-btn">
+	    🚀 WhatsApp Community beitreten</a>
+
+
+
+                <p>📸 Oder scanne den QR-Code:</p>
+                <img src="${qrCommunityLink}" style="width: 150px; height: 150px;">
+                <p style="font-size: 12px; color: #1C1C1E;">Freischaltung erfolgt innerhalb von 3 bis 24 Stunden.</p>
+            </div>
+
+
+       <button onclick="closePopup(this.parentElement)" 
+            style="margin-top:20px; padding:10px; background:#d9534f; color:#fff; border-radius:5px;">
+            ✖ Schließen
+        <br></button><br><br><br>
+    `;
+
+    document.body.appendChild(popup);
+}
+
+function closePopup(popupElement) {
+    popupElement.remove();
+    window.location.href = `ab.html?wallet=${walletAddress}`;
+}
+
+
+
+</script>
+
+
+
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Elemente für Level & Zugang abrufen
+    const levelButton = document.getElementById("levelButton");
+    const levelList = document.getElementById("levelList");
+    const levelInput = document.getElementById("level");
+
+    const accessButton = document.getElementById("accessButton");
+    const accessList = document.getElementById("accessList");
+    const accessInput = document.getElementById("access");
+
+    const accessDiv = document.getElementById("accessDiv");
+    const priceDiv = document.getElementById("priceDiv");
+
+    // Dropdown-Menüs öffnen/schließen
+    function setupDropdown(button, list, input, onSelect) {
+        button.addEventListener("click", function(event) {
+            event.stopPropagation(); // Verhindert sofortiges Schließen
+            list.style.display = (list.style.display === "block") ? "none" : "block";
+        });
+
+        list.querySelectorAll("li").forEach(item => {
+            item.addEventListener("click", function(event) {
+                event.stopPropagation();
+                button.innerText = this.innerText;
+                input.value = this.dataset.value;
+                list.style.display = "none";
+                if (onSelect) onSelect();
+            });
+        });
+
+        document.addEventListener("click", function(event) {
+            if (!button.contains(event.target) && !list.contains(event.target)) {
+                list.style.display = "none";
+            }
+        });
+
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape") {
+                list.style.display = "none";
+            }
+        });
+    }
+
+    // Funktion für Preisberechnung
+    function updatePrice() {
+    const level = document.getElementById("level").value;
+    const access = document.getElementById("access").value;
+    let price = "0.0";
+
+    if (!level) {
+        document.getElementById("accessDiv").classList.add("hidden");
+        document.getElementById("priceDiv").classList.add("hidden");
+        return;
+    }
+
+    document.getElementById("accessDiv").classList.remove("hidden");
+
+    if (level && access) {
+        if (level === "Fundamentale") {
+            if (access === "Monats Zugang") price = "0.03";
+            if (access === "Jahres Zugang") price = "0.3";
+            if (access === "Lifetime Zugang") price = "0.9";
+        }
+        if (level === "Breakthrough") {
+            if (access === "Monats Zugang") price = "0.05";
+            if (access === "Jahres Zugang") price = "0.5";
+            if (access === "Lifetime Zugang") price = "1.5";
+        }
+        if (level === "Elite") {
+            if (access === "Monats Zugang") price = "0.1";
+            if (access === "Jahres Zugang") price = "1.0";
+            if (access === "Lifetime Zugang") price = "3.0";
+        }
+
+        document.getElementById("ethAmount").value = price + " USDC";  // Optisch anzeigen
+        document.getElementById("ethAmount").setAttribute("data-value", price);  // Rohwert speichern
+
+        document.getElementById("priceDiv").classList.remove("hidden");
+        document.getElementById("swapButton").disabled = false;
+    } else {
+        document.getElementById("priceDiv").classList.add("hidden");
+        document.getElementById("swapButton").disabled = true;
+    }
+}
+
+
+    // Setup für beide Dropdowns
+    setupDropdown(levelButton, levelList, levelInput, updatePrice);
+    setupDropdown(accessButton, accessList, accessInput, updatePrice);
+});
+
+
+
+
+document.addEventListener("click", function(event) {
+    // Prüfen, ob auf einen Dropdown-Button oder das Dropdown-Menü geklickt wurde
+    const isDropdown = event.target.closest(".dropdown-button, .dropdown-list");
+    if (isDropdown) {
+        return; // Beendet das Event hier, damit Dropdowns funktionieren
+    }
+
+    // Prüfen, ob auf den WhatsApp- oder Community-Button geklickt wurde
+    const whatsappButton = event.target.closest("#whatsappButton");
+    const communityButton = event.target.closest("#communityButton");
+
+    function handleExternalLink(button, link) {
+        if (link && link !== "#") {
+            event.preventDefault();
+            let newTab = window.open(link, '_blank'); // Direkt versuchen, den Link zu öffnen
+
+            if (!newTab || newTab.closed || typeof newTab.closed === "undefined") {
+                // Falls `window.open()` blockiert wird, nutze direkte Weiterleitung
+                window.location.href = link;
+            }
+
+            // **Setzt den href-Wert auf `#`, um erneute Blockierungen zu verhindern**
+            setTimeout(() => {
+                button.setAttribute("href", "#");
+                history.replaceState({}, document.title, window.location.pathname); // Entfernt WhatsApp-Link aus dem Verlauf
+            }, 500);
+        } else {
+            console.error("Link ist nicht definiert oder fehlerhaft.");
+        }
+    }
+
+    // WhatsApp Button Event
+    if (whatsappButton) {
+        handleExternalLink(whatsappButton, whatsappButton.getAttribute("href"));
+        return;
+    }
+
+    // Community Button Event
+    if (communityButton) {
+        handleExternalLink(communityButton, communityButton.getAttribute("href"));
+        return;
+    }
+});
+
+// **Erzwingt KEIN vollständiges Neuladen, entfernt aber den zurückliegenden Verlaufseintrag**
+window.addEventListener("pageshow", function(event) {
+    if (event.persisted) {
+        console.log("🌍 Seite wurde aus dem Cache geladen. Entferne alte Weiterleitung.");
+        history.replaceState({}, document.title, window.location.pathname); // Entfernt den vorherigen Verlaufseintrag, aber lässt das Popup erhalten
+    }
+});
+
+
+
+</script>
+
+
+
+<footer>
+        <p>&copy; 2025 DeFi Syndicate | Dezentral. Gemeinschaftlich. Stark.</p>
+ </footer>
+</body>
+</html>
