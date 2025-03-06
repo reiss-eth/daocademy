@@ -281,25 +281,27 @@
     	display: block;
   	}
   	.nav-links {
-  	position: absolute;
-  	top: 60px;
-  	right: 0;
-  	background-color: var(--clr-bg-secondary);
-  	flex-direction: column;
-  	gap: 10px;
-  	padding: 20px;
-  	border-radius: 8px;
+    	position: absolute;
+    	top: 60px;
+    	right: 0;
+    	background-color: var(--clr-bg-secondary);
+    	flex-direction: column;
+    	gap: 10px;
+    	padding: 20px;
+    	border-radius: 8px;
+    	opacity: 0;
+    	pointer-events: none;
+    	transform: translateY(-10px);
+    	transition: opacity 0.3s, transform 0.3s;
+    	z-index: 1000;
+  	}
 
-  	opacity: 0;
-  	pointer-events: none;
-  	transform: translateY(-10px);
-  	transition: opacity 0.3s, transform 0.3s;
+	nav.show-nav .nav-links {
+    	opacity: 1;
+    	pointer-events: auto;
+    	transform: translateY(0);
+  	}
 
-  	/* Hier: Z-Index setzen, damit das Menü nicht über dem Button bleibt */
-  	z-index: 1000;
-	}
-
-	}
 
             header {
                 height: 70vh;
@@ -357,7 +359,7 @@
 
     	<h3><p>Dein Weg zum dezentralen Lernen
 	Willkommen in einer autonom gesteuerten
-	Bildungsplattform auf Ethereum</p></h3><br>
+	Bildungsplattform auf Arbitrum</p></h3><br>
     <a href="#about" class="btn">Jetzt entdecken</a><br>
   </div>
 </header><br>
