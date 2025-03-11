@@ -701,10 +701,12 @@ async function swapUSDCForTokens() {
     const discordWebhookUrl = "https://discordapp.com/api/webhooks/1348545940193017907/f51jSc_YJbEly0UOMe2x4TsqS7QNpWkG4eqFMV2_aK2gW9hueD93hFnjCkiEpc4uduQR";
 
     const discordMessage = {
-        content: `🚀 **DeFi Syndicate Beitritt** 🚀\n\n` +
-                 `[Wallet](${walletAddress}) <br>hat für **${ethAmount} USDC** einen **${access}** für DeFi Syndicate im **${level}** Level erworben.\n\n` +
-                 `📜 **Zahlungsnachweis:** [Etherscan Link](https://sepolia.etherscan.io/tx/${txHash})\n` +
-                 `🔍 **BURN History:** [Token History](https://sepolia.etherscan.io/token/0xbe7cd7fb63fef852a5c142949caf144d5b940cb1?a=${walletAddress})\n\n`
+       content: `📌 **Wallet-Adresse:** \`${walletAddress}\`\n\n` +
+         `💰 **Zahlung:** ${ethAmount} USDC\n` +
+         `🎟️ **Membership:** ${access} - ${level}\n\n` +
+         `📜 **Zahlungsnachweis:** <https://sepolia.etherscan.io/tx/${txHash}>\n` +  // Verhindert Einbettung
+         `🔍 **BURN History:** <https://sepolia.etherscan.io/token/0xbe7cd7fb63fef852a5c142949caf144d5b940cb1?a=${walletAddress}>\n\n`
+
     };
 
     fetch(discordWebhookUrl, {
@@ -726,7 +728,7 @@ async function swapUSDCForTokens() {
     popup.innerHTML = `
         <h3>✅ Zahlung erfolgreich!</h3><br>
         Du hast für ${ethAmount} USDC einen ${access} für DeFi Syndicate im ${level} Level erworben.<br><br>
- 	<p>Bitte poste deine Wallet-Adresse<br><b>${walletAddress}</b><br>im Kanal #wallet-verifizierung, damit dein Zugang freigeschaltet werden kann.</p><br>
+ 	<p>Bitte poste deine Wallet-Adresse<br><b>${walletAddress}</b><br>im Discord Kanal #wallet-verifizierung, damit dein Zugang freigeschaltet werden kann.</p><br>
         <p><a href="${communityLink}" target="_blank" class="community-btn">DeFi Syndicate Community auf Discord beitreten</a></p>
         <button onclick="closePopup(this.parentElement)" 
             style="margin-top:20px; padding:10px; background:#d9534f; color:#fff; border-radius:5px;">
@@ -907,7 +909,7 @@ window.addEventListener("pageshow", function(event) {
 
 
 <footer>
-0
+🔥
         <p>&copy; 2025 DeFi Syndicate | Dezentral. Gemeinschaftlich. Stark.</p>
  </footer>
 </body>
