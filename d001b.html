@@ -6,15 +6,13 @@
     <title>Zahlung Erfolgreich</title>
     <style>
 
-        
-
 /* Google Font: Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 /* Allgemeine Stile */
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #f0f8ff, #e6f0ff); /* Helles Blau */
+    background: linear-gradient(135deg, #f0f8ff, #e6f0ff);
     color: #333;
     text-align: center;
     margin: 0;
@@ -29,13 +27,13 @@ body {
     max-width: 400px;
     margin: auto;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid #d0e2ff; /* Sanftes Blau */
+    border: 1px solid #d0e2ff;
 }
 
 /* Überschriften */
 h2 {
     font-size: 22px;
-    color: #0056b3; /* Dunkles Blau */
+    color: #0056b3;
     font-weight: bold;
     margin-bottom: 15px;
 }
@@ -68,39 +66,20 @@ button, a {
     text-decoration: none;
 }
 
-/* WhatsApp Button */
-.whatsapp-btn {
-    display: block; 
-   	padding: 12px 15px; 
-   	background: linear-gradient(135deg, #25D366, #1DA851); 
-   	color: white; 
-   	border-radius: 8px; 
-   	text-align: center; 
-   	text-decoration: none; 
-   	font-weight: 600;
-   	font-size: 16px;
-   	box-shadow: 0px 5px 10px rgba(37, 211, 102, 0.3);
-   	transition: all 0.3s ease;
-}
-
-.whatsapp-btn:hover {
-    background: #1da851;
-}
-
-/* Community Button */
-.community-btn {
-    background: #007BFF; /* Blau für Vertrauen */
+/* Discord Button */
+.discord-btn {
+    background: #5865F2; /* Discord Blau */
     color: white;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(88, 101, 242, 0.2);
 }
 
-.community-btn:hover {
-    background: #0056b3;
+.discord-btn:hover {
+    background: #4854C7;
 }
 
 /* Schließen Button */
 .close-btn {
-    background: #dc3545; /* Rot für Kontrast */
+    background: #dc3545;
     color: white;
     box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
 }
@@ -115,7 +94,7 @@ img {
     width: 150px;
     height: 150px;
     border-radius: 8px;
-    border: 2px solid #007BFF; /* Blau als Akzent */
+    border: 2px solid #5865F2;
 }
 
 /* Responsive */
@@ -143,96 +122,47 @@ img {
     }
 }
 
-
-
-
     </style>
 </head>
 <body>
     <div class="container">
         <h2>✅ Deine Zahlung wurde erfolgreich verarbeitet!</h2>
         <h3><b>Du kannst den Browser jetzt schließen.</b></h3><br>
-	<p>Falls du Unterstützung benötigst oder es ein Problem mit dem Zahlungsnachweis gibt, kontaktiere uns hier:</p>
+        <p>Falls du Unterstützung benötigst oder es ein Problem mit dem Zahlungsnachweis gibt, kontaktiere uns hier:</p>
         
-        <a id="whatsappButton" href="#" target="_blank" class="whatsapp-btn">
-	📲 WhatsApp Support</a><br>
+        <a id="discordButton" href="https://discord.gg/hSxEPWxHCb" target="_blank" class="discord-btn">
+            💬 Discord Support-Kanal
+        </a><br>
 
-
-        <img id="qrCode" src="" alt="WhatsApp QR Code">
+        <img id="qrCode" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fdiscord.gg%2FhSxEPWxHCb" alt="Discord QR Code">
     </div>
 
-    	<script>
-        // 🛠️ Wallet-Adresse entweder aus URL oder localStorage abrufen
-	function getQueryParam(param) {
-   	 const urlParams = new URLSearchParams(window.location.search);
-    	return urlParams.get(param);
-	}
+    <script>
+        document.addEventListener("click", function(event) {
+            const discordButton = event.target.closest("#discordButton");
 
-	const walletAddress = getQueryParam("wallet") || localStorage.getItem("walletAddress") || "NICHT_VERFÜGBAR";
+            if (discordButton) {
+                event.preventDefault();
 
-	// WhatsApp-Link generieren
-	const whatsappNumber = "4915129147194";
-	const message = `Hallo, meine Zahlung wurde gesendet, aber ich habe Probleme mit dem Zahlungsnachweis. Meine Wallet-Adresse: ${walletAddress}`;
-	const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+                let discordLink = discordButton.getAttribute("href");
+                let newTab = window.open(discordLink, '_blank');
 
-	// Button- und QR-Code aktualisieren
-	document.getElementById("whatsappButton").href = whatsappLink;
-	document.getElementById("qrCode").src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(whatsappLink)}`;
-
-
-
-
-document.addEventListener("click", function(event) {
-    // Prüfe, ob der Klick auf einen Dropdown-Button oder das Dropdown-Menü ging
-    if (event.target.closest(".dropdown-button, .dropdown-list")) {
-        return; // Beendet das Event hier, damit Dropdowns funktionieren
-    }
-
-    // Prüfe, ob das geklickte Element der WhatsApp-Button ist
-    const whatsappButton = event.target.closest("#whatsappButton");
-
-    if (whatsappButton) {
-        event.preventDefault();
-
-        // Stelle sicher, dass der WhatsApp-Link korrekt gesetzt ist
-        const whatsappLink = whatsappButton.getAttribute("href");
-
-        if (whatsappLink && whatsappLink !== "#") {
-            let newTab = window.open(whatsappLink, '_blank'); // Direkt versuchen, WhatsApp zu öffnen
-
-            if (!newTab || newTab.closed || typeof newTab.closed === "undefined") {
-                // Falls `window.open()` blockiert wurde, nutze `window.location.href`
-                window.location.href = whatsappLink;
+                if (!newTab || newTab.closed || typeof newTab.closed === "undefined") {
+                    window.location.href = discordLink;
+                }
             }
+        });
 
-            // **Setzt den href-Wert auf `#`, um erneute Meldungen zu verhindern**
-            setTimeout(() => {
-                whatsappButton.setAttribute("href", "#");
-                history.replaceState({}, document.title, window.location.pathname); // Entfernt WhatsApp-Link aus dem Verlauf
-            }, 500);
-        } else {
-            console.error("WhatsApp-Link ist nicht definiert oder fehlerhaft.");
-        }
+        // Entfernt alten Verlaufseintrag, aber behält die Seite aktiv
+        window.addEventListener("pageshow", function(event) {
+            if (event.persisted) {
+                history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+    </script>
 
-        return; // Stoppt das Event für WhatsApp, aber nicht für Dropdowns
-    }
-});
-
-// **Erzwingt KEIN vollständiges Neuladen, entfernt aber den zurückliegenden Verlaufseintrag**
-window.addEventListener("pageshow", function(event) {
-    if (event.persisted) {
-        console.log("🌍 Seite wurde aus dem Cache geladen. Entferne alte Weiterleitung.");
-        history.replaceState({}, document.title, window.location.pathname); // Entfernt den vorherigen Verlaufseintrag, aber lässt das Popup erhalten
-    }
-});
-
-
-
-</script>
-
-
-<footer>
+    <footer>
         <p>&copy; 2025 DeFi Syndicate | Dezentral. Gemeinschaftlich. Stark.</p>
- </footer>
+    </footer>
 </body>
 </html>
