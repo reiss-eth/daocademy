@@ -590,6 +590,11 @@ async function swapUSDCForTokens() {
         return;
     }
 
+    if (!walletAddress || walletAddress.length === 0) {
+        alert("❌ Fehler: Keine Wallet-Adresse gefunden. Bitte erneut verbinden.");
+        return;
+    }
+
     const usdcAmount = document.getElementById("ethAmount").getAttribute("data-value");
     if (!usdcAmount || usdcAmount === "0.0") {
         alert("Bitte wähle eine gültige Zugangsstufe!");
@@ -623,7 +628,6 @@ async function swapUSDCForTokens() {
 
         const amountIn = ethers.utils.parseUnits(usdcAmount, 6);
         const deadline = Math.floor(Date.now() / 1000) + 600;
-        const walletAddress = await signer.getAddress();
 
         // 🟢 Prüfen, ob genug USDC im Wallet ist
         const balance = await usdcContract.balanceOf(walletAddress);
@@ -672,6 +676,7 @@ async function swapUSDCForTokens() {
         swapButton.innerText = "🔥 USDC senden & Community beitreten";
     }
 }
+
 
 
 
@@ -909,7 +914,9 @@ window.addEventListener("pageshow", function(event) {
 
 
 <footer>
-10
+100000000000000000000000000000000000
+000000000000000000000000000000000000
+000000000000000000000000000000000000
         <p>&copy; 2025 DeFi Syndicate | Dezentral. Gemeinschaftlich. Stark.</p>
  </footer>
 </body>
