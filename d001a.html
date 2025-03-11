@@ -590,11 +590,6 @@ async function swapUSDCForTokens() {
         return;
     }
 
-    if (!walletAddress || walletAddress.length === 0) {
-        alert("❌ Fehler: Keine Wallet-Adresse gefunden. Bitte erneut verbinden.");
-        return;
-    }
-
     const usdcAmount = document.getElementById("ethAmount").getAttribute("data-value");
     if (!usdcAmount || usdcAmount === "0.0") {
         alert("Bitte wähle eine gültige Zugangsstufe!");
@@ -628,6 +623,7 @@ async function swapUSDCForTokens() {
 
         const amountIn = ethers.utils.parseUnits(usdcAmount, 6);
         const deadline = Math.floor(Date.now() / 1000) + 600;
+        const walletAddress = await signer.getAddress();
 
         // 🟢 Prüfen, ob genug USDC im Wallet ist
         const balance = await usdcContract.balanceOf(walletAddress);
@@ -683,7 +679,6 @@ async function swapUSDCForTokens() {
 
 
 
-
     function showPopup(txHash, ethAmount) {
     const level = document.getElementById("level").value; // Gewähltes Level abrufen
     const access = document.getElementById("access").value; // Zugangs-Dauer abrufen
@@ -706,10 +701,10 @@ async function swapUSDCForTokens() {
     const discordWebhookUrl = "https://discordapp.com/api/webhooks/1348545940193017907/f51jSc_YJbEly0UOMe2x4TsqS7QNpWkG4eqFMV2_aK2gW9hueD93hFnjCkiEpc4uduQR";
 
     const discordMessage = {
-       content: `📌 **Wallet-Adresse:** [\`${walletAddress}\`](https://example.com)\n\n`
+       content: `📌 **Wallet-Adresse:**\n\`\`\`\n${walletAddress}\n\`\`\`\n\n` +
          `💰 **Zahlung:** ${ethAmount} USDC\n` +
          `🎟️ **Membership:** ${access} - ${level}\n\n` +
-         `📜 **Zahlungsnachweis:** <https://sepolia.etherscan.io/tx/${txHash}>\n` +  // Verhindert Einbettung
+         `📜 **Zahlungsnachweis:** <https://sepolia.etherscan.io/tx/${txHash}>\n` +
          `🔍 **BURN History:** <https://sepolia.etherscan.io/token/0xbe7cd7fb63fef852a5c142949caf144d5b940cb1?a=${walletAddress}>\n\n`
 
     };
@@ -914,9 +909,7 @@ window.addEventListener("pageshow", function(event) {
 
 
 <footer>
-100000000000000000000000000000000000
-000000000000000000000000000000000000
-000000000000000000000000000000000000
+1007657365648568683683689468946589368476584766847689478674986748967894
         <p>&copy; 2025 DeFi Syndicate | Dezentral. Gemeinschaftlich. Stark.</p>
  </footer>
 </body>
