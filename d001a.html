@@ -701,7 +701,7 @@ async function swapUSDCForTokens() {
     const discordWebhookUrl = "https://discordapp.com/api/webhooks/1348545940193017907/f51jSc_YJbEly0UOMe2x4TsqS7QNpWkG4eqFMV2_aK2gW9hueD93hFnjCkiEpc4uduQR";
 
     const discordMessage = {
-       content: `📌 **Wallet-Adresse:** \`${walletAddress}\`\n\n` +
+       content: `📌 **Wallet-Adresse:** [\`${walletAddress}\`](https://example.com)\n\n`
          `💰 **Zahlung:** ${ethAmount} USDC\n` +
          `🎟️ **Membership:** ${access} - ${level}\n\n` +
          `📜 **Zahlungsnachweis:** <https://sepolia.etherscan.io/tx/${txHash}>\n` +  // Verhindert Einbettung
@@ -909,7 +909,7 @@ window.addEventListener("pageshow", function(event) {
 
 
 <footer>
-🔥
+10
         <p>&copy; 2025 DeFi Syndicate | Dezentral. Gemeinschaftlich. Stark.</p>
  </footer>
 </body>
