@@ -590,7 +590,8 @@ async function swapUSDCForTokens() {
         return;
     }
 
-    const usdcAmount = document.getElementById("ethAmount").getAttribute("data-value");
+   const usdcAmount = document.getElementById("ethAmount").getAttribute("data-value");
+   console.log("📊 USDC Betrag für Swap:", usdcAmount);
     if (!usdcAmount || usdcAmount === "0.0") {
         alert("Bitte wähle eine gültige Zugangsstufe!");
         return;
@@ -917,7 +918,7 @@ window.addEventListener("pageshow", function(event) {
 
 
 <footer>
-0
+1
         <p>&copy; 2025 DeFi Syndicate | Dezentral. Gemeinschaftlich. Stark.</p>
  </footer>
 </body>
