@@ -634,12 +634,25 @@ async function swapUSDCForTokens() {
         }
 
         // 🟢 Prüfen, ob Genehmigung bereits erteilt wurde
-        const allowance = await usdcContract.allowance(walletAddress, UNISWAP_ROUTER_ADDRESS);
-        if (allowance.lt(amountIn)) {
-            console.log("⚠️ Genehmigung wird erteilt...");
-            const approvalTx = await usdcContract.approve(UNISWAP_ROUTER_ADDRESS, ethers.constants.MaxUint256);
-            await approvalTx.wait();
-        }
+const allowance = await usdcContract.allowance(walletAddress, UNISWAP_ROUTER_ADDRESS);
+console.log(`🛑 Aktuelle USDC-Genehmigung: ${ethers.utils.formatUnits(allowance, 6)} USDC`);
+
+if (allowance.lt(amountIn)) {
+    console.log("⚠️ Genehmigung wird erteilt...");
+    try {
+        const approvalTx = await usdcContract.approve(UNISWAP_ROUTER_ADDRESS, ethers.constants.MaxUint256);
+        console.log("⏳ Warte auf Bestätigung der Genehmigung...");
+        await approvalTx.wait();
+        console.log("✅ Genehmigung erfolgreich erteilt!");
+    } catch (error) {
+        console.error("❌ Fehler bei der Genehmigung:", error);
+        alert("❌ Genehmigung fehlgeschlagen. Bitte genehmige die USDC-Transaktion in MetaMask.");
+        return;
+    }
+} else {
+    console.log("✅ Genehmigung bereits vorhanden.");
+}
+
 
         console.log("🔄 Berechne Slippage...");
         const path = [USDC_ADDRESS, TOKEN_ADDRESS];
@@ -918,7 +931,7 @@ window.addEventListener("pageshow", function(event) {
 
 
 <footer>
-1
+0
         <p>&copy; 2025 DeFi Syndicate | Dezentral. Gemeinschaftlich. Stark.</p>
  </footer>
 </body>
