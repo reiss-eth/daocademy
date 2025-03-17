@@ -1,0 +1,19 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Passe den Branch an, falls nötig
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Repository klonen
+        uses: actions/checkout@v3
+
+      - name: 🔧 Setze Umgebungsvariablen aus Secrets
+        run: echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" >> $GITHUB_ENV
+
+      - name: 🚀 Deployment abschließen
+        run: echo "Webhook Secret geladen: $DISCORD_WEBHOOK_URL"
