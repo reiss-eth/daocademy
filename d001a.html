@@ -690,12 +690,31 @@ if (allowance.lt(amountIn)) {
 
 
 
+async function fetchWebhookUrl() {
+    try {
+        const response = await fetch("https://discord-webhook-api-production-22a7.up.railway.app/get-webhook");
+        const data = await response.json();
+
+        if (data.webhookUrl) {
+            console.log("✅ Webhook URL erfolgreich geladen:", data.webhookUrl);
+            return data.webhookUrl;
+        } else {
+            console.error("❌ Fehler: Keine Webhook-URL erhalten.");
+            return null;
+        }
+    } catch (error) {
+        console.error("❌ Fehler beim Abrufen der Webhook-URL:", error);
+        return null;
+    }
+}
 
 
 
-    function showPopup(txHash, ethAmount) {
+
+async function showPopup(txHash, ethAmount) {
     const level = document.getElementById("level").value; // Gewähltes Level abrufen
     const access = document.getElementById("access").value; // Zugangs-Dauer abrufen
+    const walletAddress = await signer.getAddress(); // Wallet-Adresse abrufen
 
     if (!access) {
         console.error("Fehler: access ist leer oder undefined.");
@@ -712,16 +731,21 @@ if (allowance.lt(amountIn)) {
         communityLink = "https://discord.gg/kbZVaaASN8";
     }
 
-    const discordWebhookUrl = "https://discordapp.com/api/webhooks/1348545940193017907/f51jSc_YJbEly0UOMe2x4TsqS7QNpWkG4eqFMV2_aK2gW9hueD93hFnjCkiEpc4uduQR";
+    // **Webhook-URL abrufen**
+    const discordWebhookUrl = await fetchWebhookUrl();
+    if (!discordWebhookUrl) {
+        console.error("❌ Fehler: Webhook-URL konnte nicht abgerufen werden.");
+        alert("Es gab ein Problem beim Abrufen der Discord Webhook URL.");
+        return;
+    }
 
-   const discordMessage = {
-    content: `📌 **Wallet-Adresse:** ${walletAddress}\n\n` +
-        `💰 **Zahlung:** ${ethAmount} USDC\n` +
-        `🎟️ **Membership:** ${access} - ${level}\n\n` +
-        `📜 **Zahlungsnachweis:** <https://sepolia.etherscan.io/tx/${txHash}>\n` +
-        `🔍 **BURN History:** <https://sepolia.etherscan.io/token/0xbe7cd7fb63fef852a5c142949caf144d5b940cb1?a=${walletAddress}>\n\n`
-};
-
+    const discordMessage = {
+        content: `📌 **Wallet-Adresse:** ${walletAddress}\n\n` +
+            `💰 **Zahlung:** ${ethAmount} USDC\n` +
+            `🎟️ **Membership:** ${access} - ${level}\n\n` +
+            `📜 **Zahlungsnachweis:** <https://sepolia.etherscan.io/tx/${txHash}>\n` +
+            `🔍 **BURN History:** <https://sepolia.etherscan.io/token/0xbe7cd7fb63fef852a5c142949caf144d5b940cb1?a=${walletAddress}>\n\n`
+    };
 
     fetch(discordWebhookUrl, {
         method: "POST",
@@ -738,29 +762,27 @@ if (allowance.lt(amountIn)) {
     });
 
     const popup = document.createElement("div");
-popup.className = "popup";
-popup.innerHTML = `
-    <h3>✅ Zahlung erfolgreich!</h3><br>
-    Du hast für ${ethAmount} USDC einen ${access} für DeFi Syndicate im ${level} Level erworben.<br><br>
-    
-    <p>Deine Buchung ist nun im <b>#buchungs-eingang</b> Kanal und wird in kürze aktiviert.</p>
+    popup.className = "popup";
+    popup.innerHTML = `
+        <h3>✅ Zahlung erfolgreich!</h3><br>
+        Du hast für ${ethAmount} USDC einen ${access} für DeFi Syndicate im ${level} Level erworben.<br><br>
+        
+        <p>Deine Buchung ist nun im <b>#buchungs-eingang</b> Kanal und wird in kürze aktiviert.</p>
 
-    <p style="background: #eaeaea; padding: 10px; border-radius: 5px; font-weight: bold;">
-    <code>${walletAddress}</code><br>
-    </p>
+        <p style="background: #eaeaea; padding: 10px; border-radius: 5px; font-weight: bold;">
+        <code>${walletAddress}</code><br>
+        </p>
 
-    <p><a href="${communityLink}" target="_blank" class="community-btn">DeFi Syndicate Community auf Discord beitreten</a></p><br>
+        <p><a href="${communityLink}" target="_blank" class="community-btn">DeFi Syndicate Community auf Discord beitreten</a></p><br>
 
-    <button onclick="closePopup(this.parentElement)" 
-        style="margin-top:20px; padding:10px; background:#d9534f; color:#fff; border-radius:5px;">
-        ✖ Schließen
-    </button><br>
-`;
-
+        <button onclick="closePopup(this.parentElement)" 
+            style="margin-top:20px; padding:10px; background:#d9534f; color:#fff; border-radius:5px;">
+            ✖ Schließen
+        </button><br>
+    `;
 
     document.body.appendChild(popup);
 }
-
 
 function closePopup(popupElement) {
     popupElement.remove();
@@ -770,9 +792,6 @@ function closePopup(popupElement) {
 
 
 </script>
-
-
-
 
 
 
@@ -931,7 +950,6 @@ window.addEventListener("pageshow", function(event) {
 
 
 <footer>
-0
         <p>&copy; 2025 DeFi Syndicate | Dezentral. Gemeinschaftlich. Stark.</p>
  </footer>
 </body>
